@@ -1,4 +1,6 @@
 streamlit
-altair
 pandas
+numpy
+altair
+matplotlib
 vega_datasets

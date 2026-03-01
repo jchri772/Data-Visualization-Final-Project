@@ -7,11 +7,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.title("Premier League Interactive Dashboard: 2023 - 2025")
+st.title("Premier League Interactive Dashboard")
 
 st.markdown("""
 ### Welcome to the Premier League Analysis Tool
-This dashboard explores team performance, attacking consistency, and home-field advantage across the last two seasons.
 
 **How to navigate:**
 * **Story**: View a guided narrative of team performance comparisons.
