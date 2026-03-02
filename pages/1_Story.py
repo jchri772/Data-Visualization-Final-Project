@@ -42,7 +42,6 @@ def render_story_page():
     ).encode(
         text=alt.value('US-International Travel: Passenger Trends by Foreign Country')
     ).properties(
-        width=1000,
         height=50)
 
     #create years selection and country selection
@@ -86,7 +85,8 @@ def render_story_page():
                 alt.value(1.0),   
                 alt.value(0.3)),
             tooltip=['Year:O', alt.Tooltip('sum(PASSENGERS):Q', title='Sum of Passengers', format=',.0f')]
-            ).properties(width=1000, height=200, 
+            ).properties(#width=1000, 
+                         height=200, 
                          title=alt.Title('US International Air Traffic: Annual Passenger Volume to/from the United States', fontSize = 20))
 
     top_10_countries = pax_by_country.groupby('Country Name')['PASSENGERS'].sum().nlargest(10).index.tolist()
@@ -103,7 +103,8 @@ def render_story_page():
             alt.Tooltip('Country Name:N'),
             alt.Tooltip('Year:O'),
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]).add_params(
-        country_selection).properties(width=1000, height=400,
+        country_selection).properties(#width
+                                      height=400,
         title=alt.TitleParams(
             text="Annual Passenger Trends: Top 10 Countries",
             fontSize=20))
@@ -117,7 +118,7 @@ def render_story_page():
         year_txt="isValid(year_selection.Year) ? year_selection.Year : 'All Years'",
         label="'US-International Travel: ' + datum.year_txt + ' Average Country Distance vs. Passengers Flown'"
     ).properties(
-        width=1000,
+        #width=1000,
         height=40 
     ).add_params(selection_year)
 
@@ -143,7 +144,7 @@ def render_story_page():
                   alt.Tooltip('mean(AVG_DISTANCE_FLOWN):Q', title='Average Flown Distance To US (Miles)', format=',.0f'),
                   alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers Flown', format=',.0f')]
                 ).add_params(country_selection).transform_filter("(year_selection.Year == null) || (datum.Year == year_selection.Year)"
-                                                                ).properties(width=1000,
+                                                                ).properties(#width=1000,
                     height=500)
 
     #Create income chart
@@ -189,7 +190,7 @@ def render_story_page():
             title="Year",
             axis=alt.Axis(labelAngle=0, tickCount=10))
     ).properties(
-        width=1000,
+        #width=1000,
         height=400,
         title=alt.TitleParams(
         text=alt.ExprRef(
@@ -205,7 +206,7 @@ def render_story_page():
     ).transform_calculate(
         label="(isValid(year_selection.Year) && country_selection['Country Name']) ? "
               "country_selection['Country Name'] + ' ' + year_selection.Year + ' Summary Statistics' : ''").properties(
-        width=1000,
+        #width=1000,
         height=50 
     ).add_params(
         selection_year, 
@@ -235,7 +236,7 @@ def render_story_page():
             alt.Tooltip('carrier_name:N', title='Carrier'),
             alt.Tooltip('passenger_count:Q', title='Passengers', format=',.0f')]
     ).properties(
-        width=450,
+        #width=450,
         height=450,
         title="Top 5 Carriers")
 
@@ -262,7 +263,7 @@ def render_story_page():
             alt.Tooltip('route_name:N', title='Nondirectional Route'),
             alt.Tooltip('passenger_count:Q', title='Passengers', format=',.0f')]
     ).properties(
-        width=450,
+        #width=450,
         height=450,
         title="Top 5 Nondirectional Nonstop Routes")
 
@@ -272,7 +273,7 @@ def render_story_page():
         opacity=0             
     ).encode(
     ).properties(
-        width=400,
+        #width=400,
         height=120)
 
     #display
