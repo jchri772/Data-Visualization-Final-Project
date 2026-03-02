@@ -69,7 +69,7 @@ def render_airport_page():
         stroke='black',
         strokeWidth=1.5
     ).properties(
-        width=1000,
+        width=700,
         height=600,
         title=alt.TitleParams(
             text="US Airports By Annual International Passengers - Volume Map",
