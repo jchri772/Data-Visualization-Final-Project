@@ -208,7 +208,7 @@ def render_airport_page():
         width=350, height=450, 
         title = 'Top 5 Foreign Destinations')
 
-    map_chart = (background + circles).project(type='albersUsa', scale = 1200)
+    map_chart = (background + circles).project(type='albersUsa')
 
     spacer = alt.Chart().mark_rect(
         color='white',           
