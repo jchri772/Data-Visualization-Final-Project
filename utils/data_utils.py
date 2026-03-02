@@ -10,7 +10,17 @@ def get_all_data():
     ##### 2025 DATA ENDS IN OCTOBER 
     years = range(1990, 2026)
     files = [f"T100-{year}.csv" for year in years]
-    df_list = [pd.read_csv(file) for file in files]
+    
+    # Define columns to load to save memory and prevent crashes
+    used_columns = [
+        'DEPARTURES_PERFORMED', 'PASSENGERS', 'SEATS', 'DISTANCE', 'CLASS', 
+        'ORIGIN', 'DEST', 'ORIGIN_CITY_NAME', 'DEST_CITY_NAME', 
+        'ORIGIN_COUNTRY_NAME', 'DEST_COUNTRY_NAME', 'YEAR', 'AIRCRAFT_TYPE',
+        'CARRIER_NAME'
+    ]
+
+    # Load only necessary columns and handle mixed types with low_memory=False
+    df_list = [pd.read_csv(file, usecols=used_columns, low_memory=False) for file in files]
     T100_full = pd.concat(df_list, axis=0, ignore_index=True)
     print(T100_full.shape)
     T100_full.head() # Create a new column NON_US_COUNTRY
