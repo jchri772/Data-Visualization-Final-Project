@@ -3,7 +3,6 @@ import altair as alt
 from utils.data_utils import get_all_data
 
 
-#st.title("US-International Travel: Passenger Trends by Foreign Country Dashboard (1990-2025)")
 st.markdown("""
     <style>
     /* Target the main container */
