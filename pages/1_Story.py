@@ -87,7 +87,7 @@ def render_story_page():
             tooltip=['Year:O', alt.Tooltip('sum(PASSENGERS):Q', title='Sum of Passengers', format=',.0f')]
             ).properties(#width=1000, 
                          height=200, 
-                         title=alt.Title('US International Air Traffic: Annual Passenger Volume to/from the United States', fontSize = 20))
+                         title=alt.Title('US International Air Traffic: Annual Passenger Volume to/from the United States', fontSize = 20, anchor = 'middle'))
 
     top_10_countries = pax_by_country.groupby('Country Name')['PASSENGERS'].sum().nlargest(10).index.tolist()
 
@@ -107,7 +107,7 @@ def render_story_page():
                                       height=400,
         title=alt.TitleParams(
             text="Annual Passenger Trends: Top 10 Countries",
-            fontSize=20))
+            fontSize=20, anchor = 'middle'))
 
     scatterplot_title = alt.Chart(full_airport_map).mark_text(
         fontSize=20,           
