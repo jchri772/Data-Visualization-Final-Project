@@ -190,13 +190,13 @@ def render_story_page():
             title="Year",
             axis=alt.Axis(labelAngle=0, tickCount=10))
     ).properties(
-        #width=1000,
+        width=800,
         height=400,
         title=alt.TitleParams(
         text=alt.ExprRef(
             "country_selection['Country Name'] ? "
             "country_selection['Country Name'] + ' GDP Per Capita vs. Passenger Volume' : "
-            "''"), fontSize=20))
+            "''"), fontSize=20, anchor='middle'))
 
     bar_plots_title = alt.Chart(full_airport_map).mark_text(
         fontSize=20,           
