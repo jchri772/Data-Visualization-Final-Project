@@ -238,7 +238,10 @@ def render_story_page():
     ).properties(
         width=350,
         height=450,
-        title="Top 5 Carriers", anchor = 'middle')
+        title=alt.TitleParams(
+            text="Top 5 Carriers",
+            anchor='middle'
+        ))
 
     top_routes_bar_chart = alt.Chart(pax_by_country).transform_filter(
         country_selection                    
@@ -265,7 +268,10 @@ def render_story_page():
     ).properties(
         width=350,
         height=450,
-        title="Top 5 Nondirectional Nonstop Routes", anchor = 'middle')
+        title=alt.TitleParams(
+            text="Top 5 Nondirectional Nonstop Routes",
+            anchor='middle'
+        ))
 
     #create spacer so that bar chart labels become visible
     spacer = alt.Chart().mark_rect(
