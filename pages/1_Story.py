@@ -236,7 +236,7 @@ def render_story_page():
             alt.Tooltip('carrier_name:N', title='Carrier'),
             alt.Tooltip('passenger_count:Q', title='Passengers', format=',.0f')]
     ).properties(
-        width=370,
+        width=350,
         height=450,
         title="Top 5 Carriers")
 
@@ -263,7 +263,7 @@ def render_story_page():
             alt.Tooltip('route_name:N', title='Nondirectional Route'),
             alt.Tooltip('passenger_count:Q', title='Passengers', format=',.0f')]
     ).properties(
-        width=370,
+        width=350,
         height=450,
         title="Top 5 Nondirectional Nonstop Routes")
 
