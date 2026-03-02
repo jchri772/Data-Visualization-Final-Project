@@ -3,6 +3,7 @@ import altair as alt
 from utils.data_utils import get_all_data
 
 
+st.title("US-International Travel: Passenger Trends by Foreign Country Dashboard (1990-2025)")
 st.markdown("""
     <style>
     /* Target the main container */
@@ -302,7 +303,8 @@ def render_airport_page():
     title = alt.Chart(us_airport_map).mark_text(
         fontSize=30, fontWeight='bold', align='center', baseline='middle',).encode(
         text=alt.value('US-International Travel: Passenger Trends by US Gateway Airports')
-    ).properties(width=1000, height=50)
+    ).properties(#width=1000, 
+                 height=50)
 
     #Create year and airport selections
     full_airport_map = pd.concat([us_airport_map, new_data], ignore_index=True)
@@ -350,7 +352,7 @@ def render_airport_page():
             alt.Tooltip('YEAR:O', title='Year'), 
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]
         ).properties(
-            width=1000, 
+            #width=1000, 
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 
@@ -362,7 +364,7 @@ def render_airport_page():
         stroke='black',
         strokeWidth=1.5
     ).properties(
-        width=1000,
+        #width=1000,
         height=500,
         title=alt.TitleParams(
             text="US Airports By Annual International Passengers - Volume Map",
@@ -405,7 +407,8 @@ def render_airport_page():
         label="'Annual International Passenger Volume - ' + datum.code + ' (' + datum.US_CITY_NAME + ')'"
     ).transform_filter(
         click_selection).properties(
-        width=1000, height=30 ).add_params(click_selection)
+        #width=1000, 
+        height=30 ).add_params(click_selection)
 
     line_graph_by_airport = alt.Chart(full_airport_map).mark_line(point=True).encode(
         y=alt.Y('sum(PASSENGERS):Q', title='Sum of International Passengers'),
@@ -417,7 +420,8 @@ def render_airport_page():
     ).transform_filter(
         click_selection 
     ).properties(
-        width=1000, height=250,
+        #width=1000, 
+        height=250,
     ).add_params(
         click_selection)
 
@@ -435,7 +439,8 @@ def render_airport_page():
     ).transform_filter(
         click_selection
     ).properties(
-        width=1000, height=30 
+        #width=1000, 
+        height=30 
     ).add_params(click_selection, selection_year)
 
     #create bar graph showing top airlines for each airport
@@ -465,7 +470,7 @@ def render_airport_page():
     ).transform_filter(
         alt.datum.rank <= 5
     ).properties(
-        width=450, height=450, 
+        width=350, height=450, 
         title = 'Top 5 Airlines by International Passengers')
 
     #create bar graph showing top destinations
@@ -495,7 +500,7 @@ def render_airport_page():
     ).transform_filter(
         alt.datum.rank <= 5
     ).properties(
-        width=450, height=450, 
+        width=350, height=450, 
         title = 'Top 5 Foreign Destinations')
 
     map_chart = (background + circles).project(type='albersUsa')
@@ -516,5 +521,4 @@ def render_airport_page():
 
     st.altair_chart(dashboard, use_container_width=True)
 
-if __name__ == "__main__":
-    render_airport_page()
+render_airport_page()
