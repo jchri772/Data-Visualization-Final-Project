@@ -61,7 +61,7 @@ def render_airport_page():
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 
-                fontSize=20))
+                fontSize=20, anchor = 'middle'))
 
     #create map for showing size of airport international destinations and selecting the airport
     background = alt.Chart(states).mark_geoshape(
@@ -69,8 +69,8 @@ def render_airport_page():
         stroke='black',
         strokeWidth=1.5
     ).properties(
-        #width=1000,
-        height=500,
+        width=1000,
+        height=600,
         title=alt.TitleParams(
             text="US Airports By Annual International Passengers - Volume Map",
             subtitle=["Select year through dropdown menu at the bottom.", 
@@ -208,9 +208,15 @@ def render_airport_page():
         width=350, height=450, 
         title = 'Top 5 Foreign Destinations')
 
-    map_chart = (background + circles).project(type='albersUsa')
+    map_chart = (background + circles).project(type='albersUsa', scale = 1200)
 
-    spacer = alt.Chart(pd.DataFrame({'x': [0]})).mark_point(opacity=0).properties(height=50)
+    spacer = alt.Chart().mark_rect(
+        color='white',           
+        opacity=0             
+    ).encode(
+    ).properties(
+        width=400,
+        height=120)
 
     dashboard = (years_bar_chart & 
                  map_chart & 
