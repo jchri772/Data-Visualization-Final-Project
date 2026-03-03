@@ -1,0 +1,270 @@
+import streamlit as st
+import altair as alt
+import pandas as pd
+import numpy as np
+from utils.data_utils import get_all_data
+
+st.title("Geopolitical shocks: country-level collapses and post-COVID movers")
+
+def render_geopolitical_page():
+
+    pax_by_country, pax_by_airport, us_airport_map, new_data = get_all_data()
+
+    alt.data_transformers.disable_max_rows()
+
+    # ---------------------------
+    # Normalize to expected names
+    # ---------------------------
+    df = pax_by_country.copy()
+    df.columns = [c.strip() for c in df.columns]
+
+    df = df.rename(columns={
+        "Country Name": "foreign_country",
+        "YEAR": "YEAR",
+        "PASSENGERS": "PASSENGERS"
+    })
+
+    required = {"YEAR", "foreign_country", "PASSENGERS"}
+    missing = required - set(df.columns)
+    if missing:
+        st.error(f"Missing required columns in pax_by_country: {missing}")
+        st.stop()
+
+    country_year = (
+        df.groupby(["YEAR", "foreign_country"], as_index=False)
+          .agg(passengers=("PASSENGERS", "sum"))
+    )
+    country_year["YEAR"] = pd.to_numeric(country_year["YEAR"], errors="coerce").astype("Int64")
+    
+    global_year = (
+        country_year.groupby("YEAR", as_index=False)
+                    .agg(total_passengers=("passengers", "sum"))
+    )
+
+    # ---------------------------
+    # Timeline
+    # ---------------------------
+    events = pd.DataFrame({
+        "YEAR": [2001, 2020],
+        "event": ["9/11", "COVID"]
+    })
+
+    timeline = alt.Chart(global_year).mark_line().encode(
+        x=alt.X("YEAR:Q", title="Year", axis=alt.Axis(format="d")),
+        y=alt.Y("total_passengers:Q", title="Total international passengers"),
+        tooltip=["YEAR:Q", alt.Tooltip("total_passengers:Q", format=",.0f")]
+    ).properties(
+        width=800,
+        height=260,
+        title="International passengers to/from the U.S. (1990–2025)"
+    )
+
+    markers = alt.Chart(events).mark_rule(strokeDash=[6, 4]).encode(
+        x="YEAR:Q",
+        tooltip=["event:N", "YEAR:Q"]
+    )
+
+    st.altair_chart(timeline + markers, use_container_width=False)
+
+    # ---------------------------
+    # Shock collapses
+    # ---------------------------
+    event_windows = [
+        {"event": "9/11", "pre": 2000, "post": 2002},
+        {"event": "COVID", "pre": 2019, "post": 2020},
+    ]
+
+    shocks_list = []
+
+    for e in event_windows:
+        pre = (
+            country_year[country_year["YEAR"] == e["pre"]]
+            [["foreign_country", "passengers"]]
+            .rename(columns={"passengers": "passengers_pre"})
+        )
+
+        post = (
+            country_year[country_year["YEAR"] == e["post"]]
+            [["foreign_country", "passengers"]]
+            .rename(columns={"passengers": "passengers_post"})
+        )
+
+        merged = pre.merge(post, on="foreign_country", how="outer").fillna(0)
+
+        merged["event"] = e["event"]
+        merged["pre_year"] = e["pre"]
+        merged["post_year"] = e["post"]
+
+        merged["abs_change"] = merged["passengers_post"] - merged["passengers_pre"]
+
+        merged["pct_change"] = np.where(
+            merged["passengers_pre"] > 0,
+            merged["abs_change"] / merged["passengers_pre"],
+            np.nan
+        )
+
+        shocks_list.append(merged)
+
+    shocks = pd.concat(shocks_list, ignore_index=True)
+
+    shock_events = sorted(shocks["event"].unique())
+
+    event_param = alt.param(
+        name="Event",
+        value="COVID",
+        bind=alt.binding_select(options=shock_events, name="Shock event: ")
+    )
+
+    BASELINE_MIN = 50_000
+
+    bars_down = (
+        alt.Chart(shocks)
+        .add_params(event_param)
+        .transform_filter("datum.event == Event")
+        .transform_filter(f"datum.passengers_pre >= {BASELINE_MIN}")
+        .transform_calculate(
+            pct_change_pct="datum.pct_change * 100",
+            loss_mag="(-1) * (datum.pct_change * 100)"
+        )
+        .transform_filter("datum.pct_change_pct < 0")
+        .transform_window(
+            rank="rank(datum.loss_mag)",
+            sort=[alt.SortField("loss_mag", order="descending")]
+        )
+        .transform_filter("datum.rank <= 25")
+        .mark_bar(color="#ac3333c9")
+        .encode(
+            x=alt.X(
+                "foreign_country:N",
+                sort=alt.SortField("loss_mag", order="descending"),
+                axis=alt.Axis(labelAngle=90),
+                title=None
+            ),
+            y=alt.Y(
+                "loss_mag:Q",
+                title="Percent decline (pre → post)",
+                scale=alt.Scale(domain=[0, 105], reverse=True)
+            ),
+            tooltip=[
+                "foreign_country:N",
+                alt.Tooltip("passengers_pre:Q", format=",.0f"),
+                alt.Tooltip("passengers_post:Q", format=",.0f"),
+                alt.Tooltip("pct_change_pct:Q", format=".1f"),
+            ]
+        )
+        .properties(
+            width=800,
+            height=450,
+            title="Largest country-level collapses during major shocks"
+        )
+    )
+
+    st.altair_chart(bars_down, use_container_width=False)
+
+    # ---------------------------
+    # Post-COVID movers (2019 → 2024)
+    # ---------------------------
+    PRE_YEAR = 2019
+    POST_YEAR = 2024
+    
+    cy_19_24 = (
+        country_year[country_year["YEAR"].isin([PRE_YEAR, POST_YEAR])]
+        .pivot_table(index="foreign_country", columns="YEAR", values="passengers", aggfunc="sum")
+        .reset_index()
+        .rename(columns={PRE_YEAR: "passengers_pre", POST_YEAR: "passengers_post"})
+        .fillna(0)
+    )
+
+    cy_19_24["abs_change"] = cy_19_24["passengers_post"] - cy_19_24["passengers_pre"]
+
+    cy_19_24["pct_change"] = np.where(
+        cy_19_24["passengers_pre"] > 0,
+        cy_19_24["abs_change"] / cy_19_24["passengers_pre"],
+        np.nan
+    )
+
+    cy_19_24["pct_change_pct"] = 100 * cy_19_24["pct_change"]
+
+    BASELINE_MIN_POSTCOVID = 50_000
+    cy_19_24 = cy_19_24[cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID]
+
+    top_inc_pct = cy_19_24.nlargest(5, "pct_change")
+    top_dec_pct = cy_19_24.nsmallest(5, "pct_change")
+
+    top10_pct = pd.concat([top_dec_pct, top_inc_pct], ignore_index=True)
+
+    pct_chart = (
+        alt.Chart(top10_pct)
+        .mark_bar()
+        .encode(
+            x=alt.X(
+                "foreign_country:N",
+                sort=alt.SortField("pct_change_pct", order="ascending"),
+                axis=alt.Axis(labelAngle=45),
+                title=None
+            ),
+            y=alt.Y(
+                "pct_change_pct:Q",
+                title="Percent change (2019 → 2024)"
+            ),
+            tooltip=[
+                "foreign_country:N",
+                alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                alt.Tooltip("abs_change:Q", format=",.0f"),
+                alt.Tooltip("pct_change_pct:Q", format=".1f"),
+            ]
+        )
+        .properties(
+            width=800,
+            height=450,
+            title="Top post-COVID movers by percent change (2019 → 2024)"
+        )
+    )
+
+    zero_line = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(strokeDash=[4, 4]).encode(y="y:Q")
+
+    st.altair_chart(pct_chart + zero_line, use_container_width=False)
+
+    # ---------------------------
+    # Post-COVID movers by magnitude (2019 → 2024)
+    # ---------------------------
+    top_inc_abs = cy_19_24.nlargest(5, "abs_change")
+    top_dec_abs = cy_19_24.nsmallest(5, "abs_change")
+    top10_abs = pd.concat([top_dec_abs, top_inc_abs], ignore_index=True)
+
+    abs_chart = (
+        alt.Chart(top10_abs)
+        .mark_bar()
+        .encode(
+            x=alt.X(
+                "foreign_country:N",
+                sort=alt.SortField("abs_change", order="ascending"),
+                axis=alt.Axis(labelAngle=45),
+                title=None
+            ),
+            y=alt.Y(
+                "abs_change:Q",
+                title="Passenger change (2019 → 2024)"
+            ),
+            tooltip=[
+                "foreign_country:N",
+                alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                alt.Tooltip("abs_change:Q", title="Abs change", format=",.0f"),
+                alt.Tooltip("pct_change_pct:Q", title="% change", format=".1f"),
+            ]
+        )
+        .properties(
+            width=800,
+            height=450,
+            title="Top post-COVID movers by magnitude (2019 → 2024)"
+        )
+    )
+
+    abs_zero = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(strokeDash=[4, 4]).encode(y="y:Q")
+
+    st.altair_chart(abs_chart + abs_zero, use_container_width=False)
+
+
+render_geopolitical_page()
