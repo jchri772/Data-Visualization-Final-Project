@@ -105,38 +105,47 @@ def render_airport_page():
 
     max_pax = full_airport_map.groupby(['YEAR', 'code'])['PASSENGERS'].sum().max()
 
-    circles = alt.Chart(full_airport_map).mark_circle(
-    stroke='white', 
-    strokeWidth=1, 
-    strokeOpacity=0.8
-).encode(
-    longitude='lon:Q', 
-    latitude='lat:Q', 
-    size=alt.Size('total_pax:Q', 
-        scale=alt.Scale(type='sqrt', domain=[0, max_pax], range=[0, 1500]), 
-        title='Annual International Passengers',
-        legend=alt.Legend(
-            orient='bottom',      
-            direction='horizontal',
-            titleOrient='top',   
-            labelExpr="datum.label + ' '", 
-            format='.2s',         
-            symbolFillColor='steelblue', 
-            tickCount=5)),
-    opacity=alt.condition(click_selection, alt.value(0.9), alt.value(0.4)),
-    tooltip=[
-        alt.Tooltip('code:N', title='Airport Code'),
-        alt.Tooltip('US_CITY_NAME:N', title='City Name'),
-        alt.Tooltip('total_pax:Q', title='International Passengers', format=',.0f')
-    ]
-).transform_filter(
-    selection_year
-).transform_aggregate(
-    total_pax='sum(PASSENGERS)',
-    groupby=['code', 'lon', 'lat', 'US_CITY_NAME'] 
-).add_params(
-    click_selection
-)
+    circles = alt.Chart(full_airport_map
+                        ).mark_circle(stroke = 'white', strokeWidth = 1, strokeOpacity =.8).encode(
+        longitude='lon:Q', 
+        latitude='lat:Q', 
+        size=alt.Size('total_pax:Q', 
+                      scale=alt.Scale(domain=[0, max_pax],range=[10, 4000]), 
+                      title='Total Passengers',
+                      legend=alt.Legend(
+                            orient='bottom',      
+                            direction='horizontal',
+                            titleOrient='top',    
+                            format='.2s',        
+                            symbolFillColor='steelblue',
+                            offset=20            
+            )
+        opacity=alt.condition(click_selection, alt.value(0.9), alt.value(0.4)),
+        tooltip=[
+            alt.Tooltip('code:N', title='Airport Code'),
+            alt.Tooltip('US_CITY_NAME:N', title='City Name'),
+            alt.Tooltip('total_pax:Q', title='International Passengers', format=',.0f')]
+        ).transform_filter(
+            selection_year
+        ).transform_aggregate(
+            total_pax='sum(PASSENGERS)',
+            groupby=['code', 'lon', 'lat', 'US_CITY_NAME'] 
+        ).add_params(
+            click_selection)
+
+    airport_label_block = alt.Chart(full_airport_map).mark_text(
+        fontSize=20, align='center',
+    ).encode(
+        text=alt.condition(
+            click_selection,
+            alt.Text('label:N'),
+            alt.value("Select an airport"))
+    ).transform_calculate(
+        label="'Annual International Passenger Volume - ' + datum.code + ' (' + datum.US_CITY_NAME + ')'"
+    ).transform_filter(
+        click_selection).properties(
+        width='container', 
+        height=30 ).add_params(click_selection)
 
     line_graph_by_airport = alt.Chart(full_airport_map).mark_line(point=True).encode(
         y=alt.Y('sum(PASSENGERS):Q', title='Sum of International Passengers'),
