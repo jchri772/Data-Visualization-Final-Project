@@ -5,6 +5,31 @@ import pandas as pd
 from vega_datasets import data
 from utils.data_utils import get_all_data
 
+st.set_page_config(layout="wide")
+
+st.markdown("""
+    <style>
+    /* Target the main container */
+    .block-container {
+        max-width: 2000px;
+        padding-top: 2rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Optional: Center your headers and subheaders for a cleaner look */
+    h1, h2, h3 {
+        text-align: center;
+    }
+    
+    /* Center the chart container itself */
+    .stVegaLiteChart {
+        display: flex;
+        justify-content: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 st.title("US-International Travel: Passenger Trends by US Gateway Airports (1990-2025)")
 def render_airport_page():
     pax_by_country, pax_by_airport, us_airport_map, new_data = get_all_data()
@@ -57,7 +82,7 @@ def render_airport_page():
             alt.Tooltip('YEAR:O', title='Year'), 
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]
         ).properties(
-            #width=1000, 
+            width=1000, 
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 

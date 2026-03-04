@@ -4,11 +4,13 @@ from utils.data_utils import get_all_data
 
 
 st.title("US-International Travel: Passenger Trends by Foreign Country Dashboard (1990-2025)")
+st.set_page_config(layout="wide")
+
 st.markdown("""
     <style>
     /* Target the main container */
     .block-container {
-        max-width: 800px;
+        max-width: 2000px;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
@@ -26,7 +28,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
 
 def render_story_page():
     pax_by_country, pax_by_airport, full_airport_map, new_data = get_all_data()
