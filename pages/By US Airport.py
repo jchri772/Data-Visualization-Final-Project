@@ -69,7 +69,7 @@ def render_airport_page():
             alt.Tooltip('YEAR:O', title='Year'), 
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]
         ).properties(
-            width = 'container',
+            width = 900,
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 
@@ -81,7 +81,7 @@ def render_airport_page():
         stroke='black',
         strokeWidth=1.5
     ).properties(
-        width='container',
+        width=900,
         height=600,
         title=alt.TitleParams(
             text="US Airports By Annual International Passengers - Volume Map",
@@ -124,7 +124,7 @@ def render_airport_page():
         label="'Annual International Passenger Volume - ' + datum.code + ' (' + datum.US_CITY_NAME + ')'"
     ).transform_filter(
         click_selection).properties(
-        width='container', 
+        width=900, 
         height=30 ).add_params(click_selection)
 
     line_graph_by_airport = alt.Chart(full_airport_map).mark_line(point=True).encode(
@@ -137,7 +137,7 @@ def render_airport_page():
     ).transform_filter(
         click_selection 
     ).properties(
-        width='container',
+        width=900,
         height=250,
     ).add_params(
         click_selection)
@@ -156,7 +156,7 @@ def render_airport_page():
     ).transform_filter(
         click_selection
     ).properties(
-        width='container', 
+        width=900, 
         height=30 
     ).add_params(click_selection, selection_year)
 
