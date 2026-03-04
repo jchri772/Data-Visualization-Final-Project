@@ -9,24 +9,13 @@ st.set_page_config(layout="wide")
 
 st.markdown("""
     <style>
-    /* Target the main container */
     .block-container {
-        max-width: 2000px;
+        max-width: 100%; /* Changed from 2000px */
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
     }
-    
-    /* Optional: Center your headers and subheaders for a cleaner look */
-    h1, h2, h3 {
-        text-align: center;
-    }
-    
-    /* Center the chart container itself */
-    .stVegaLiteChart {
-        display: flex;
-        justify-content: center;
-    }
+    /* ... rest of your CSS ... */
     </style>
     """, unsafe_allow_html=True)
 
@@ -257,7 +246,7 @@ def render_airport_page():
                  (bar_graph_top_airlines | bar_graph_top_destinations) & 
                  spacer).resolve_scale(
         color='independent',
-        size='independent')
+        size='independent').configure_view(strokeWidth=0)
 
     st.altair_chart(dashboard, use_container_width=True)
 
