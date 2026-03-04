@@ -10,7 +10,7 @@ st.markdown("""
     <style>
     /* Target the main container */
     .block-container {
-        max-width: 750px;
+        max-width: 900px;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
@@ -114,7 +114,7 @@ def render_airport_page():
         latitude='lat:Q', 
         size=alt.Size('total_pax:Q', 
             scale=alt.Scale(type='sqrt', domain=[0, max_pax], range=[0, 1500]), 
-            title='Annual International Passengers',
+            title='International Passengers',
             legend=alt.Legend(
                 orient='bottom',      
                 direction='horizontal',
