@@ -82,7 +82,7 @@ def render_airport_page():
             alt.Tooltip('YEAR:O', title='Year'), 
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]
         ).properties(
-            width=1000, 
+            #=1000, 
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 
@@ -94,7 +94,7 @@ def render_airport_page():
         stroke='black',
         strokeWidth=1.5
     ).properties(
-        width=650,
+        #width=650,
         height=600,
         title=alt.TitleParams(
             text="US Airports By Annual International Passengers - Volume Map",
