@@ -82,7 +82,7 @@ def render_airport_page():
             alt.Tooltip('YEAR:O', title='Year'), 
             alt.Tooltip('sum(PASSENGERS):Q', title='Total Passengers', format=',.0f')]
         ).properties(
-            width='container',
+            width=600,
             height=200, 
             title=alt.Title(
                 'US International Air Traffic - Annual Passenger Volume', 
