@@ -75,7 +75,7 @@ def render_airport_page():
     years_bar_chart = alt.Chart(pax_by_airport).mark_bar().add_params(selection_year).encode(
         x=alt.X('YEAR:O', title="Year"),
         y=alt.Y('sum(PASSENGERS):Q', title="Total Passengers", 
-                axis=alt.Axis(titlePadding=10, labelPadding=10, minExtent=80)),
+                axis=alt.Axis(titlePadding=10, labelPadding=20, minExtent=80)),
         opacity=alt.condition(
             selection_year, alt.value(1.0), alt.value(0.3)),
         tooltip=[
@@ -155,7 +155,7 @@ def render_airport_page():
 
     line_graph_by_airport = alt.Chart(full_airport_map).mark_line(point=True).encode(
         y=alt.Y('sum(PASSENGERS):Q', title='Sum of International Passengers', 
-                axis=alt.Axis(titlePadding=10, labelPadding=10, minExtent=80)),
+                axis=alt.Axis(titlePadding=10, labelPadding=20, minExtent=80)),
         x=alt.X('YEAR:O', title='Year'),
         tooltip=[
             alt.Tooltip('YEAR:O', title='Year'),
@@ -214,7 +214,7 @@ def render_airport_page():
     ).transform_filter(
         alt.datum.rank <= 5
     ).properties(
-        width=350, height=450, 
+        width=320, height=450, 
         title=alt.TitleParams(
             text='Top 5 Airlines by International Passenger Volume',
             anchor='middle',
@@ -247,7 +247,7 @@ def render_airport_page():
     ).transform_filter(
         alt.datum.rank <= 5
     ).properties(
-        width=350, height=450, 
+        width=320, height=450, 
         title=alt.TitleParams(
             text='Top 5 Foreign Destinations',
             anchor='middle',
