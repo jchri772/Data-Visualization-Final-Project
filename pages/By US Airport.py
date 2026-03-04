@@ -74,7 +74,8 @@ def render_airport_page():
 
     years_bar_chart = alt.Chart(pax_by_airport).mark_bar().add_params(selection_year).encode(
         x=alt.X('YEAR:O', title="Year"),
-        y=alt.Y('sum(PASSENGERS):Q', title="Total Passengers"),
+        y=alt.Y('sum(PASSENGERS):Q', title="Total Passengers", 
+                axis=alt.Axis(titlePadding=10, labelPadding=10, minExtent=80)),
         opacity=alt.condition(
             selection_year, alt.value(1.0), alt.value(0.3)),
         tooltip=[
@@ -153,7 +154,8 @@ def render_airport_page():
         height=30 ).add_params(click_selection)
 
     line_graph_by_airport = alt.Chart(full_airport_map).mark_line(point=True).encode(
-        y=alt.Y('sum(PASSENGERS):Q', title='Sum of International Passengers'),
+        y=alt.Y('sum(PASSENGERS):Q', title='Sum of International Passengers', 
+                axis=alt.Axis(titlePadding=10, labelPadding=10, minExtent=80)),
         x=alt.X('YEAR:O', title='Year'),
         tooltip=[
             alt.Tooltip('YEAR:O', title='Year'),
