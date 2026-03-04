@@ -8,13 +8,24 @@ from utils.data_utils import get_all_data
 st.set_page_config(layout="wide")
 st.markdown("""
     <style>
+    /* Target the main container */
     .block-container {
-        max-width: 100%; /* Changed from 2000px */
+        max-width: 2000px;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
     }
-    /* ... rest of your CSS ... */
+    
+    /* Optional: Center your headers and subheaders for a cleaner look */
+    h1, h2, h3 {
+        text-align: center;
+    }
+    
+    /* Center the chart container itself */
+    .stVegaLiteChart {
+        display: flex;
+        justify-content: center;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -247,6 +258,6 @@ def render_airport_page():
         color='independent',
         size='independent').configure_view(strokeWidth=0)
 
-    st.altair_chart(dashboard, use_container_width=False)
+    st.altair_chart(dashboard, use_container_width=True)
 
 render_airport_page()
