@@ -112,6 +112,8 @@ def render_airport_page():
         size=alt.Size('total_pax:Q', 
                       scale=alt.Scale(domain=[0, max_pax],range=[10, 4000]), 
                       title='Total Passengers'),
+                      legend = alt.Legend(title = 'Annual International Passengers', 
+                                          orient = 'bottom', direction = 'horizontal')),
         opacity=alt.condition(click_selection, alt.value(.9), alt.value(0.4)),
         tooltip=[
             alt.Tooltip('code:N', title='Airport Code'),
