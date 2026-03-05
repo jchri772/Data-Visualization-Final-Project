@@ -219,7 +219,7 @@ def render_story_page():
        (alt.expr.substring(alt.datum.rank_name, 4, 5) == alt.expr.substring(alt.datum.rank_pax, 4, 5)) &
         (alt.datum.carrier_name != None) & (alt.datum.carrier_name != '')).mark_bar().encode(
         x=alt.X('carrier_name:N', title='Carrier', 
-            sort='-y', 
+            sort='-y',
         axis=alt.Axis(
             labelAngle=-45)),
         y=alt.Y('passenger_count:Q', title='Passengers'),
@@ -273,6 +273,7 @@ def render_story_page():
     ).properties(
         width=400,
         height=120)
+
     
     st.altair_chart(years_bar_chart, use_container_width=True).resolve_scale(color='independent')
     st.altair_chart(country_change_chart, use_container_width=True).resolve_scale(color='independent')
