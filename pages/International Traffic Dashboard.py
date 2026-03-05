@@ -18,13 +18,13 @@ st.markdown("""
     
     /* Optional: Center your headers and subheaders for a cleaner look */
     h1, h2, h3 {
-        text-align: center;
+        text-align: left;
     }
     
     /* Center the chart container itself */
     .stVegaLiteChart {
         display: flex;
-        justify-content: center;
+        justify-content: left;
     }
     </style>
     """, unsafe_allow_html=True)
