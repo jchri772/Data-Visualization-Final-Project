@@ -278,9 +278,9 @@ def render_story_page():
     def create_text_chart(content, fontSize=16):
         return alt.Chart(pax_by_country).mark_text(
             align='left', 
-             baseline='middle', 
-              fontSize=fontSize, 
-              dx=10).encode(
+                baseline='middle', 
+                fontSize=fontSize, 
+                dx=10).encode(
           text=alt.value(content)).properties(width=800, height=50)
 
     years_bar_chart_text = create_text_chart("Explainer for bar chart")
