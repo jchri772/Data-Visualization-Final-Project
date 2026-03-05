@@ -293,11 +293,12 @@ def render_story_page():
      ).encode(
           text='text:N'
      ).properties(
-          width=800,        
+          width=1000,        
           height=len(wrapped_text) * (fontSize + 6))
 
 
     years_bar_chart_text = create_text_chart("""The first graph, US International Air Traffic: Annual Passenger Volume to/from the United States, uses a bar chart format to display the total number of international passengers flown to and from the United States each year. It highlights the selected year and is meant to give the reader a sense of the steady overall growth in international passenger traffic over time, despite a couple of significant decreases: the first occurring in 2001 and 2002 after 9/11, and the second, much larger decrease occurring in 2020 as a result of the COVID-19 pandemic.""")
+   
     #display
     chart = (years_bar_chart & (years_bar_chart_text) &
     country_change_chart & 
