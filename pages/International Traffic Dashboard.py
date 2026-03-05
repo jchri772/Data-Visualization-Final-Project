@@ -294,10 +294,12 @@ def render_story_page():
           height=len(wrapped_text) * (fontSize + 6))
 
 
-    years_bar_chart_text = create_text_chart("""The first graph, US International Air Traffic: Annual Passenger Volume to/from the United States, uses a bar chart format to display the total number of international passengers flown to and from the United States each year. It highlights the selected year and is meant to give the reader a sense of the steady overall growth in international passenger traffic over time, despite a couple of significant decreases: the first occurring in 2001 and 2002 after 9/11, and the second, much larger decrease occurring in 2020 as a result of the COVID-19 pandemic.""")
-   
+    years_bar_chart_text = create_text_chart("""The figure below uses a bar chart format to display the total number of international passengers flown to and from the United States each year. It highlights the selected year and is intended to give the reader a sense of the steady overall growth in international passenger traffic over time, despite two significant decreases: the first occurring in 2001 and 2002 following 9/11, and the second, much larger decrease occurring in 2020 as a result of the COVID-19 pandemic. You may select the year to highlight for this chart and the remaining figures using the slider at the bottom of the dashboard.""")
+    country_change_text = create_text_chart("""The next figure below is a line chart displaying the annual passenger count for international travelers flying to and from the United States for the top 10 countries in terms of overall traffic between 1990 and 2024. This figure provides an impression of which countries have the most international traffic to the United States and how the ranking of those countries has shifted over time. The countries with consistently the most passengers flown to and from the United States are Canada, Mexico, and the United Kingdom, while Germany, the Dominican Republic, Japan, France, the Netherlands, Jamaica, and Brazil make up the remaining top nations. As shown in the overall passenger trends chart above, there was a steep decline in the number of passengers flown between the U.S. and all countries below in 2020, followed by a recovery that continued through 2024. Interestingly, Mexico was far less affected by the pandemic than any other top country and surpassed Canada in 2020 as the top foreign country for flights to the United States for the first time. Mexico maintained this position through 2024, and by 2022, it had more passengers flying to and from the United States than in 2019—a point at which most other countries were still far from fully recovering to pre-pandemic levels. This likely relates to the lower level of travel restrictions in Mexico compared to other foreign countries during the pandemic, along with the close ties between the two nations.""")
+
     #display
-    chart = (years_bar_chart & (years_bar_chart_text) &
+    chart = (years_bar_chart_text &
+    years_bar_chart & country_change_text & 
     country_change_chart & 
     scatterplot_title &
     scatterplot & 
