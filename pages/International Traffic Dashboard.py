@@ -292,7 +292,7 @@ def render_story_page():
      ).encode(
           text='text:N'
      ).properties(
-          width='container',        
+          width=800,        
           height=len(wrapped_text) * (fontSize + 6))
 
 
