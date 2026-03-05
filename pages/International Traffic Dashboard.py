@@ -283,7 +283,7 @@ def render_story_page():
               dx=10).encode(
           text=alt.value(content)).properties(width=800, height=50)
 
-    years_bar_chart_text = intro_text = create_text_chart("Explainer for bar chart")
+    years_bar_chart_text = create_text_chart("Explainer for bar chart")
     #display
     chart = (years_bar_chart & years_bar_chart_text
     country_change_chart & 
