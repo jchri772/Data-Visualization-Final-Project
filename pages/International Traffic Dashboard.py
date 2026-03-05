@@ -285,7 +285,14 @@ def render_story_page():
      spacer).resolve_scale(
         color='independent')
     
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(years_bar_chart, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart(country_change_chart, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart(scatterplot_title, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart(scatterplot, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart(income_chart, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart(bar_plots_title, use_container_width=True).resolve_scale(color='independent')
+    st.altair_chart((top_airlines_bar_chart | top_routes_bar_chart).resolve_scale(color='independent'), use_container_width=True)
+    st.altair_chart(spacer, use_container_width=True)
 
 render_story_page()
 
