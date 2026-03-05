@@ -273,16 +273,27 @@ def render_story_page():
     ).properties(
         width=400,
         height=120)
+    
+    #### Text charts 
+    def create_text_chart(content, fontSize=16):
+    return alt.Chart(pax_by_country).mark_text(
+        align='left', 
+            baseline='middle', 
+            fontSize=fontSize, 
+            dx=10).encode(
+        text=alt.value(content)).properties(width=800, height=50)
 
-    st.altair_chart(years_bar_chart.resolve_scale(color='independent'), use_container_width=True)
-    st.altair_chart(country_change_chart.resolve_scale(color='independent'), use_container_width=True)
-    st.altair_chart(scatterplot_title.resolve_scale(color='independent'), use_container_width=True)
-    st.altair_chart(scatterplot.resolve_scale(color='independent'), use_container_width=True)
-    st.altair_chart(income_chart.resolve_scale(color='independent'), use_container_width=True)
-    st.altair_chart(bar_plots_title.resolve_scale(color='independent'), use_container_width=True)
-
-    st.altair_chart((top_airlines_bar_chart | top_routes_bar_chart).resolve_scale(color='independent'), use_container_width=False)
-    st.altair_chart(spacer, use_container_width=True)
-
+    #display
+    chart = (years_bar_chart & 
+    country_change_chart & 
+    scatterplot_title &
+    scatterplot & 
+    income_chart & 
+    bar_plots_title &
+    (top_airlines_bar_chart | top_routes_bar_chart) & 
+    spacer).resolve_scale(
+        color='independent')
+    
+    st.altair_chart(chart, use_container_width=True)
 render_story_page()
 
