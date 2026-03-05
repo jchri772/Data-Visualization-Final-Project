@@ -221,7 +221,7 @@ def render_story_page():
         x=alt.X('carrier_name:N', title='Carrier', 
             sort='-y', 
         axis=alt.Axis(
-            labelAngle=-45, labelOverlap=False)),
+            labelAngle=-45)),
         y=alt.Y('passenger_count:Q', title='Passengers'),
         color=alt.Color('carrier_name:N', legend=None),
         tooltip=[
@@ -251,7 +251,7 @@ def render_story_page():
         x=alt.X('route_name:N', title='Nondirectional Route', 
             sort='-y',
         axis=alt.Axis(
-            labelAngle=-45, labelOverlap=False)),
+            labelAngle=-45)),
         y=alt.Y('passenger_count:Q', title='Passengers'),
         color=alt.Color('route_name:N', legend=None),
         tooltip=[
