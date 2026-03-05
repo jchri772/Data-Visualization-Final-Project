@@ -279,16 +279,14 @@ def render_story_page():
     #### Text charts 
     import textwrap
 
-    def create_text_chart(content, fontSize=15, width_chars=140):
+    def create_text_chart(content, fontSize=13, width_chars=140):
         wrapped_text = textwrap.wrap(content, width=width_chars)
         return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
          align='left',     
          baseline='top', 
          fontSize=fontSize, 
          fontWeight='normal',
-         color='#666',
-          lineBreak='\n',
-          x=0               
+         color='#666', lineBreak='\n', x=0               
      ).encode(
           text='text:N'
      ).properties(
