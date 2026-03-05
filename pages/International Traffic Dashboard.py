@@ -283,7 +283,7 @@ def render_story_page():
         wrapped_text = textwrap.wrap(content, width=width_chars)
         return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
          align='left',     
-         baseline='middle', 
+         baseline='top', 
          fontSize=fontSize, 
          fontWeight='normal',
          color='#666',
