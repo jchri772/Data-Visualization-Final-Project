@@ -281,7 +281,6 @@ def render_story_page():
 
     def create_text_chart(content, fontSize=13, width_chars=100):
         wrapped_text = textwrap.wrap(content, width=width_chars)
-    
         return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
          align='left',     
          baseline='middle', 
@@ -293,7 +292,7 @@ def render_story_page():
      ).encode(
           text='text:N'
      ).properties(
-          width=1000,        
+          width=1500,        
           height=len(wrapped_text) * (fontSize + 6))
 
 
