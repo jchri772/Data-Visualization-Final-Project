@@ -1,3 +1,5 @@
+import textwrap
+
 import streamlit as st
 import altair as alt
 from utils.data_utils import get_all_data
@@ -277,22 +279,22 @@ def render_story_page():
     #### Text charts 
     import textwrap
 
-def create_text_chart(content, fontSize=13, width_chars=100):
-    wrapped_text = textwrap.wrap(content, width=width_chars)
+    def create_text_chart(content, fontSize=13, width_chars=100):
+        wrapped_text = textwrap.wrap(content, width=width_chars)
     
-    return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
-        align='left',     
-        baseline='middle', 
-        fontSize=fontSize, 
-        fontWeight='normal',
-        color='#666',
-        lineBreak='\n',
-        x=0               
-    ).encode(
-        text='text:N'
-    ).properties(
-        width=800,        
-        height=len(wrapped_text) * (fontSize + 6))
+        return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
+         align='left',     
+         baseline='middle', 
+         fontSize=fontSize, 
+         fontWeight='normal',
+         color='#666',
+          lineBreak='\n',
+          x=0               
+     ).encode(
+          text='text:N'
+     ).properties(
+          width=800,        
+          height=len(wrapped_text) * (fontSize + 6))
 
 
     years_bar_chart_text = create_text_chart("""The first graph, US International Air Traffic: Annual Passenger Volume to/from the United States, uses a bar chart format to display the total number of international passengers flown to and from the United States each year. It highlights the selected year and is meant to give the reader a sense of the steady overall growth in international passenger traffic over time, despite a couple of significant decreases: the first occurring in 2001 and 2002 after 9/11, and the second, much larger decrease occurring in 2020 as a result of the COVID-19 pandemic.""")
