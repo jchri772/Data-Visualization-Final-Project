@@ -12,7 +12,7 @@ st.markdown("""
     <style>
     /* Target the main container */
     .block-container {
-        max-width: 850px;
+        max-width: 900px;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
@@ -290,7 +290,7 @@ def render_story_page():
      ).encode(
           text='text:N'
      ).properties(
-          width=840,        
+          width=800,        
           height=len(wrapped_text) * (fontSize + 6))
 
 
