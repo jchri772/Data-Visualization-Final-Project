@@ -6,13 +6,13 @@ from utils.data_utils import get_all_data
 
 
 st.title("US-International Travel: Passenger Trends by Foreign Country Dashboard (1990-2025)")
-#st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 
 st.markdown("""
     <style>
     /* Target the main container */
     .block-container {
-        max-width: 900px;
+        max-width: 850px;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
