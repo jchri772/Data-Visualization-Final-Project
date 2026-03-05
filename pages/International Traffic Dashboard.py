@@ -275,17 +275,17 @@ def render_story_page():
         height=120)
     
     #### Text charts 
-    def create_text_chart(content, fontSize=16):
+    def create_text_chart(content, fontSize=12):
         return alt.Chart(pax_by_country).mark_text(
             align='left', 
-                baseline='middle', 
-                fontSize=fontSize, 
-                dx=10).encode(
-          text=alt.value(content)).properties(width=800, height=50)
+            baseline='middle', 
+            fontSize=fontSize, fontWeight='normal',
+            dx=0).encode(
+          text=alt.value(content)).properties(width=800, height=50).properties(height=20)
 
     years_bar_chart_text = create_text_chart("Explainer for bar chart")
     #display
-    chart = (years_bar_chart & years_bar_chart_text &
+    chart = (years_bar_chart & (years_bar_chart_text | alt.Chart().mark_none()) &
     country_change_chart & 
     scatterplot_title &
     scatterplot & 
