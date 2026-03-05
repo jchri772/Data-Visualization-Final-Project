@@ -285,7 +285,7 @@ def render_story_page():
 
     years_bar_chart_text = create_text_chart("Explainer for bar chart")
     #display
-    chart = (years_bar_chart & years_bar_chart_text
+    chart = (years_bar_chart & years_bar_chart_text &
     country_change_chart & 
     scatterplot_title &
     scatterplot & 
