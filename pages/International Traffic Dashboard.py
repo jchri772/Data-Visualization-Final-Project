@@ -219,9 +219,9 @@ def render_story_page():
        (alt.expr.substring(alt.datum.rank_name, 4, 5) == alt.expr.substring(alt.datum.rank_pax, 4, 5)) &
         (alt.datum.carrier_name != None) & (alt.datum.carrier_name != '')).mark_bar().encode(
         x=alt.X('carrier_name:N', title='Carrier', 
-            sort='-y',
+            sort='-y', 
         axis=alt.Axis(
-            labelAngle=-45)),
+            labelAngle=-45), labelOverlap=False),
         y=alt.Y('passenger_count:Q', title='Passengers'),
         color=alt.Color('carrier_name:N', legend=None),
         tooltip=[
@@ -251,7 +251,7 @@ def render_story_page():
         x=alt.X('route_name:N', title='Nondirectional Route', 
             sort='-y',
         axis=alt.Axis(
-            labelAngle=-45)),
+            labelAngle=-45), labelOverlap=False),
         y=alt.Y('passenger_count:Q', title='Passengers'),
         color=alt.Color('route_name:N', legend=None),
         tooltip=[
@@ -273,17 +273,6 @@ def render_story_page():
     ).properties(
         width=400,
         height=120)
-
-    #display
-    chart = (years_bar_chart & 
-     country_change_chart & 
-     scatterplot_title &
-     scatterplot & 
-     income_chart & 
-     bar_plots_title &
-     (top_airlines_bar_chart | top_routes_bar_chart) & 
-     spacer).resolve_scale(
-        color='independent')
     
     st.altair_chart(years_bar_chart, use_container_width=True).resolve_scale(color='independent')
     st.altair_chart(country_change_chart, use_container_width=True).resolve_scale(color='independent')
@@ -291,7 +280,7 @@ def render_story_page():
     st.altair_chart(scatterplot, use_container_width=True).resolve_scale(color='independent')
     st.altair_chart(income_chart, use_container_width=True).resolve_scale(color='independent')
     st.altair_chart(bar_plots_title, use_container_width=True).resolve_scale(color='independent')
-    st.altair_chart((top_airlines_bar_chart | top_routes_bar_chart).resolve_scale(color='independent'), use_container_width=True)
+    st.altair_chart((top_airlines_bar_chart | top_routes_bar_chart).resolve_scale(color='independent'), use_container_width=False)
     st.altair_chart(spacer, use_container_width=True)
 
 render_story_page()

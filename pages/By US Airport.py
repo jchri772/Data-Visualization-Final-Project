@@ -90,8 +90,7 @@ def render_airport_page():
 
     #create map for showing size of airport international destinations and selecting the airport
     background = alt.Chart(states).mark_geoshape(
-        fill='lightgray',
-        stroke='black',
+        fill='lightgray', stroke='black',
         strokeWidth=1.5
     ).properties(
         width='container',
@@ -100,8 +99,7 @@ def render_airport_page():
             text="US Airports By Annual International Passengers - Volume Map",
             subtitle=["Select year through dropdown menu at the bottom.", 
             "Click an airport to view passenger trends, top airlines, and top foreign destinations."],
-            subtitleFontSize=14,
-            subtitleColor='gray',
+            subtitleFontSize=14, subtitleColor='gray',
             anchor='middle' ))
 
     max_pax = full_airport_map.groupby(['YEAR', 'code'])['PASSENGERS'].sum().max()
@@ -114,30 +112,24 @@ def render_airport_page():
         longitude='lon:Q', 
         latitude='lat:Q', 
         size=alt.Size('total_pax:Q', 
-            scale=alt.Scale(type='sqrt', domain=[0, max_pax], range=[0, 1500]), 
+            scale=alt.Scale(type='sqrt', 
+                            domain=[0, max_pax], range=[0, 1500]), 
             title='International Passengers',
             legend=alt.Legend(
-                orient='bottom',      
-                direction='horizontal',
+                orient='bottom',direction='horizontal',
                 titleOrient='top',    
-                format='.2s',         
-                symbolFillColor='steelblue',
-                offset=20            
-            ) 
-        ), 
+                format='.2s', symbolFillColor='steelblue',
+                offset=20)), 
         opacity=alt.condition(click_selection, alt.value(0.9), alt.value(0.4)),
-        tooltip=[
-            alt.Tooltip('code:N', title='Airport Code'),
+        tooltip=[alt.Tooltip('code:N', title='Airport Code'),
             alt.Tooltip('US_CITY_NAME:N', title='City Name'),
             alt.Tooltip('total_pax:Q', title='International Passengers', format=',.0f')]
     ).transform_filter(
         selection_year
     ).transform_aggregate(
         total_pax='sum(PASSENGERS)',
-        groupby=['code', 'lon', 'lat', 'US_CITY_NAME'] 
-    ).add_params(
-        click_selection
-    )
+        groupby=['code', 'lon', 'lat', 'US_CITY_NAME']).add_params(
+        click_selection)
 
     airport_label_block = alt.Chart(full_airport_map).mark_text(
         fontSize=20, align='center',
