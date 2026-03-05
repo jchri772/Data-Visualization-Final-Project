@@ -66,7 +66,7 @@ def render_story_page():
     country_selection = alt.selection_point(
         name='country_selection',   
         bind=dropdown_country,
-        fields=['Country Name'], value={'Country Name': 'CANADA'},
+        fields=['Country Name'], value=[{'Country Name': 'Canada'}],
         empty=False,
         toggle=False, on = 'click')
 
