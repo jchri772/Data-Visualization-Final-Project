@@ -92,7 +92,9 @@ def render_geopolitical_page():
         "this quantitative data as a continuous trend over time, making long-run patterns "
         "and disruptions easier to interpret. The dotted vertical lines mark the timing "
         "of two major shocks to international travel, the September 11 attacks and the "
-        "COVID-19 pandemic."
+        "COVID-19 pandemic. As one can see, 9/11 had a much more modest dip in airfare "
+        "compared to COVID which saw a decline of nearly 150 million passengers in a single "
+        "year"
     )
 
     st.markdown("")
@@ -330,6 +332,46 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(movers_chart + zero_line, use_container_width=False)
+
+    if movers_view == "Percent change":
+        st.write(
+            "The figure above shows how international passenger flows changed over the five years "
+            "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
+            "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
+            "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
+            "baselines. This contrast suggests that some travel markets were able to rebound quickly "
+            "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
+            "whereas others appear to have experienced more lasting structural disruption."
+        )
+    else:
+        st.write(
+            "When the view is shifted to absolute magnitude, the largest passenger gains came from "
+            "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
+            "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
+            "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
+            "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
+            "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
+        )
+
+    # ---------------------------
+    # Summary
+    # ---------------------------
+    st.subheader("Summary: geopolitical shocks and recovery patterns")
+
+    st.write(
+        "This section highlights how major geopolitical shocks reshape international "
+        "passenger flows in uneven ways across countries and regions. By examining both "
+        "the immediate contractions and the longer-run recovery patterns, the analysis "
+        "reveals how underlying policy environments, including immigration policy, visa "
+        "regimes, and tourism dependence, influence the resilience of travel markets. "
+        "Countries with strong tourism sectors tend to recover more quickly as leisure "
+        "demand rebounds once travel restrictions ease. In contrast, countries where "
+        "travel flows are more closely tied to immigration policy, geopolitical tensions, "
+        "or refugee movements often experience slower or more policy-dependent recoveries. "
+        "Taken together, these patterns suggest that international aviation networks are "
+        "shaped not only by economic demand but also by political and institutional forces "
+        "that govern cross-border mobility."
+    )
 
 
 render_geopolitical_page()
