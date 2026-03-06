@@ -12,7 +12,7 @@ st.markdown("""
     <style>
     /* Target the main container */
     .block-container {
-        max-width: 850px;
+        max-width: 750;
         padding-top: 2rem;
         margin-left: auto;
         margin-right: auto;
