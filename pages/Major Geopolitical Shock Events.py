@@ -117,32 +117,32 @@ def render_geopolitical_page():
 
     shock_events = sorted(shocks["event"].unique())
 
-    event_param = alt.param(
-        name="Event",
-        value="COVID",
-        bind=alt.binding_select(
-            options=shock_events,
-            name="Shock event: "
-        )
+    selected_event = st.selectbox(
+        "Shock event:",
+        options=shock_events,
+        index=shock_events.index("COVID") if "COVID" in shock_events else 0
     )
 
     BASELINE_MIN = 50_000
 
+    shocks_filtered = shocks[
+        (shocks["event"] == selected_event) &
+        (shocks["passengers_pre"] >= BASELINE_MIN)
+    ].copy()
+
+    shocks_filtered["pct_change_pct"] = shocks_filtered["pct_change"] * 100
+    shocks_filtered["loss_mag"] = -1 * shocks_filtered["pct_change_pct"]
+
+    shocks_filtered = shocks_filtered[
+        shocks_filtered["pct_change_pct"] < 0
+    ].copy()
+
+    shocks_filtered = shocks_filtered.sort_values(
+        "loss_mag", ascending=False
+    ).head(25)
+
     bars_down = (
-        alt.Chart(shocks)
-        .add_params(event_param)
-        .transform_filter("datum.event == Event")
-        .transform_filter(f"datum.passengers_pre >= {BASELINE_MIN}")
-        .transform_calculate(
-            pct_change_pct="datum.pct_change * 100",
-            loss_mag="(-1) * (datum.pct_change * 100)"
-        )
-        .transform_filter("datum.pct_change_pct < 0")
-        .transform_window(
-            rank="rank(datum.loss_mag)",
-            sort=[alt.SortField("loss_mag", order="descending")]
-        )
-        .transform_filter("datum.rank <= 25")
+        alt.Chart(shocks_filtered)
         .mark_bar(color="#ac3333c9")
         .encode(
             x=alt.X(
@@ -158,9 +158,9 @@ def render_geopolitical_page():
             ),
             tooltip=[
                 "foreign_country:N",
-                alt.Tooltip("passengers_pre:Q", format=",.0f"),
-                alt.Tooltip("passengers_post:Q", format=",.0f"),
-                alt.Tooltip("pct_change_pct:Q", format=".1f"),
+                alt.Tooltip("passengers_pre:Q", title="Pre-shock passengers", format=",.0f"),
+                alt.Tooltip("passengers_post:Q", title="Post-shock passengers", format=",.0f"),
+                alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
             ]
         )
         .properties(
@@ -207,70 +207,83 @@ def render_geopolitical_page():
     cy_19_24["pct_change_pct"] = 100 * cy_19_24["pct_change"]
 
     BASELINE_MIN_POSTCOVID = 50_000
-
     cy_19_24 = cy_19_24[
         cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID
     ].copy()
 
-    # percent movers
-    top_inc_pct = cy_19_24.nlargest(5, "pct_change")
-    top_dec_pct = cy_19_24.nsmallest(5, "pct_change")
-
-    pct_df = pd.concat([top_dec_pct, top_inc_pct], ignore_index=True)
-    pct_df["view"] = "Percent change"
-    pct_df["plot_value"] = pct_df["pct_change_pct"]
-    pct_df["sort_value"] = pct_df["pct_change_pct"]
-
-    # magnitude movers
-    top_inc_abs = cy_19_24.nlargest(5, "abs_change")
-    top_dec_abs = cy_19_24.nsmallest(5, "abs_change")
-
-    abs_df = pd.concat([top_dec_abs, top_inc_abs], ignore_index=True)
-    abs_df["view"] = "Magnitude change"
-    abs_df["plot_value"] = abs_df["abs_change"]
-    abs_df["sort_value"] = abs_df["abs_change"]
-
-    movers_long = pd.concat([pct_df, abs_df], ignore_index=True)
-
-    movers_view_param = alt.param(
-        name="MoversView",
-        value="Percent change",
-        bind=alt.binding_select(
-            options=["Percent change", "Magnitude change"],
-            name="Post-COVID movers view: "
-        )
+    movers_view = st.selectbox(
+        "Post-COVID movers view:",
+        options=["Percent change", "Magnitude change"],
+        index=0
     )
 
-    movers_chart = (
-        alt.Chart(movers_long)
-        .add_params(movers_view_param)
-        .transform_filter("datum.view == MoversView")
-        .mark_bar()
-        .encode(
-            x=alt.X(
-                "foreign_country:N",
-                sort=alt.SortField("sort_value", order="ascending"),
-                axis=alt.Axis(labelAngle=45),
-                title=None
-            ),
-            y=alt.Y(
-                "plot_value:Q",
-                title="Change"
-            ),
-            tooltip=[
-                "foreign_country:N",
-                alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
-                alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
-                alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
-                alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
-            ]
+    if movers_view == "Percent change":
+        top_inc = cy_19_24.nlargest(5, "pct_change").copy()
+        top_dec = cy_19_24.nsmallest(5, "pct_change").copy()
+        movers_df = pd.concat([top_dec, top_inc], ignore_index=True).copy()
+
+        movers_chart = (
+            alt.Chart(movers_df)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    "foreign_country:N",
+                    sort=alt.SortField("pct_change_pct", order="ascending"),
+                    axis=alt.Axis(labelAngle=45),
+                    title=None
+                ),
+                y=alt.Y(
+                    "pct_change_pct:Q",
+                    title="Percent change (2019 → 2024)"
+                ),
+                tooltip=[
+                    "foreign_country:N",
+                    alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                    alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                    alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
+                    alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
+                ]
+            )
+            .properties(
+                width=800,
+                height=450,
+                title="Top post-COVID movers by percent change (2019 → 2024)"
+            )
         )
-        .properties(
-            width=800,
-            height=450,
-            title="Top post-COVID movers (2019 → 2024)"
+
+    else:
+        top_inc = cy_19_24.nlargest(5, "abs_change").copy()
+        top_dec = cy_19_24.nsmallest(5, "abs_change").copy()
+        movers_df = pd.concat([top_dec, top_inc], ignore_index=True).copy()
+
+        movers_chart = (
+            alt.Chart(movers_df)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    "foreign_country:N",
+                    sort=alt.SortField("abs_change", order="ascending"),
+                    axis=alt.Axis(labelAngle=45),
+                    title=None
+                ),
+                y=alt.Y(
+                    "abs_change:Q",
+                    title="Passenger change (2019 → 2024)"
+                ),
+                tooltip=[
+                    "foreign_country:N",
+                    alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                    alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                    alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
+                    alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
+                ]
+            )
+            .properties(
+                width=800,
+                height=450,
+                title="Top post-COVID movers by magnitude (2019 → 2024)"
+            )
         )
-    )
 
     zero_line = alt.Chart(
         pd.DataFrame({"y": [0]})
