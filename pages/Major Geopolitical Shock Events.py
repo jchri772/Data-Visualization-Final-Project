@@ -160,13 +160,13 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(bars_down, use_container_width=False)
-
+    
     # ---------------------------
-    # Post-COVID movers (2019 → 2024)
+    # Post-COVID movers (2019 → 2024), dropdown toggle
     # ---------------------------
     PRE_YEAR = 2019
     POST_YEAR = 2024
-    
+
     cy_19_24 = (
         country_year[country_year["YEAR"].isin([PRE_YEAR, POST_YEAR])]
         .pivot_table(index="foreign_country", columns="YEAR", values="passengers", aggfunc="sum")
@@ -186,85 +186,71 @@ def render_geopolitical_page():
     cy_19_24["pct_change_pct"] = 100 * cy_19_24["pct_change"]
 
     BASELINE_MIN_POSTCOVID = 50_000
-    cy_19_24 = cy_19_24[cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID]
+    cy_19_24 = cy_19_24[cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID].copy()
 
-    top_inc_pct = cy_19_24.nlargest(5, "pct_change")
-    top_dec_pct = cy_19_24.nsmallest(5, "pct_change")
+    # build top 5 up / down for percent view
+    top_inc_pct = cy_19_24.nlargest(5, "pct_change").copy()
+    top_dec_pct = cy_19_24.nsmallest(5, "pct_change").copy()
+    top_pct = pd.concat([top_dec_pct, top_inc_pct], ignore_index=True).copy()
+    top_pct["view"] = "Percent change"
+    top_pct["plot_value"] = top_pct["pct_change_pct"]
+    top_pct["sort_value"] = top_pct["pct_change_pct"]
 
-    top10_pct = pd.concat([top_dec_pct, top_inc_pct], ignore_index=True)
+    # build top 5 up / down for magnitude view
+    top_inc_abs = cy_19_24.nlargest(5, "abs_change").copy()
+    top_dec_abs = cy_19_24.nsmallest(5, "abs_change").copy()
+    top_abs = pd.concat([top_dec_abs, top_inc_abs], ignore_index=True).copy()
+    top_abs["view"] = "Magnitude change"
+    top_abs["plot_value"] = top_abs["abs_change"]
+    top_abs["sort_value"] = top_abs["abs_change"]
 
-    pct_chart = (
-        alt.Chart(top10_pct)
+    movers_long = pd.concat([top_pct, top_abs], ignore_index=True)
+
+    movers_view_param = alt.param(
+        name="MoversView",
+        value="Percent change",
+        bind=alt.binding_select(
+            options=["Percent change", "Magnitude change"],
+            name="Post-COVID movers view: "
+        )
+    )
+
+    movers_bars = (
+        alt.Chart(movers_long)
+        .add_params(movers_view_param)
+        .transform_filter("datum.view == MoversView")
         .mark_bar()
         .encode(
             x=alt.X(
                 "foreign_country:N",
-                sort=alt.SortField("pct_change_pct", order="ascending"),
+                sort=alt.SortField("sort_value", order="ascending"),
                 axis=alt.Axis(labelAngle=45),
                 title=None
             ),
             y=alt.Y(
-                "pct_change_pct:Q",
-                title="Percent change (2019 → 2024)"
+                "plot_value:Q",
+                title="Change (selected view)"
             ),
             tooltip=[
                 "foreign_country:N",
                 alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
                 alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
-                alt.Tooltip("abs_change:Q", format=",.0f"),
-                alt.Tooltip("pct_change_pct:Q", format=".1f"),
+                alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
+                alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
+                "view:N"
             ]
         )
         .properties(
             width=800,
             height=450,
-            title="Top post-COVID movers by percent change (2019 → 2024)"
+            title="Top post-COVID movers (2019 → 2024)"
         )
     )
 
-    zero_line = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(strokeDash=[4, 4]).encode(y="y:Q")
-
-    st.altair_chart(pct_chart + zero_line, use_container_width=False)
-
-    # ---------------------------
-    # Post-COVID movers by magnitude (2019 → 2024)
-    # ---------------------------
-    top_inc_abs = cy_19_24.nlargest(5, "abs_change")
-    top_dec_abs = cy_19_24.nsmallest(5, "abs_change")
-    top10_abs = pd.concat([top_dec_abs, top_inc_abs], ignore_index=True)
-
-    abs_chart = (
-        alt.Chart(top10_abs)
-        .mark_bar()
-        .encode(
-            x=alt.X(
-                "foreign_country:N",
-                sort=alt.SortField("abs_change", order="ascending"),
-                axis=alt.Axis(labelAngle=45),
-                title=None
-            ),
-            y=alt.Y(
-                "abs_change:Q",
-                title="Passenger change (2019 → 2024)"
-            ),
-            tooltip=[
-                "foreign_country:N",
-                alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
-                alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
-                alt.Tooltip("abs_change:Q", title="Abs change", format=",.0f"),
-                alt.Tooltip("pct_change_pct:Q", title="% change", format=".1f"),
-            ]
-        )
-        .properties(
-            width=800,
-            height=450,
-            title="Top post-COVID movers by magnitude (2019 → 2024)"
-        )
+    movers_zero = (
+        alt.Chart(pd.DataFrame({"y": [0]}))
+        .mark_rule(strokeDash=[4, 4])
+        .encode(y="y:Q")
     )
 
-    abs_zero = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(strokeDash=[4, 4]).encode(y="y:Q")
-
-    st.altair_chart(abs_chart + abs_zero, use_container_width=False)
-
-
-render_geopolitical_page()
+    st.altair_chart(movers_bars + movers_zero, use_container_width=False)
