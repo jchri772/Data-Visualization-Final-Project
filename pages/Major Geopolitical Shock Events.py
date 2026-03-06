@@ -47,12 +47,14 @@ def render_geopolitical_page():
     )
 
     # ---------------------------
-    # Global timeline
+    # Global 
     # ---------------------------
     events = pd.DataFrame({
         "YEAR": [2001, 2020],
         "event": ["9/11", "COVID"]
     })
+
+    st.subheader("International passengers to/from the U.S. (1990–2025)")
 
     timeline = alt.Chart(global_year).mark_line().encode(
         x=alt.X("YEAR:Q", title="Year", axis=alt.Axis(format="d")),
@@ -60,8 +62,7 @@ def render_geopolitical_page():
         tooltip=["YEAR:Q", alt.Tooltip("total_passengers:Q", format=",.0f")]
     ).properties(
         width=800,
-        height=260,
-        title="International passengers to/from the U.S. (1990–2025)"
+        height=260
     )
 
     markers = alt.Chart(events).mark_rule(
