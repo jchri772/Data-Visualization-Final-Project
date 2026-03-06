@@ -50,11 +50,8 @@ def render_airport_page():
     states = alt.topo_feature(data.us_10m.url, feature='states')
 
     click_selection = alt.selection_point(
-        on='click', 
-        fields=['code'], 
-        value=[{'code': 'JFK'}], 
-        empty=False, 
-        nearest=True,
+        on='click', fields=['code'], 
+        empty=False, nearest=True,
         clear='dblclick')
 
     Years = sorted(pax_by_airport['YEAR'].unique().tolist())
