@@ -7,7 +7,17 @@ from utils.data_utils import get_all_data
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.write("")
 st.write("")
-st.write("Taking a deeper look, this section examines how major geopolitical shocks affected international passenger flows to and from the United States. For clarity, the analysis focuses on two major disruptions, the September 11 attacks and the COVID-19 pandemic. The first visualization presents the aggregate impact of these events on overall passenger volumes. Subsequent visuals then move to the country level, highlighting where the largest contractions occurred using measures such as magnitude of passenger loss and percentage change relative to pre-shock levels.")
+
+st.write(
+    "Taking a deeper look, this section examines how major geopolitical shocks affected "
+    "international passenger flows to and from the United States. For clarity, the analysis "
+    "focuses on two major disruptions, the September 11 attacks and the COVID-19 pandemic. "
+    "The first visualization presents the aggregate impact of these events on overall passenger "
+    "volumes. Subsequent visuals then move to the country level, highlighting where the largest "
+    "contractions occurred using measures such as magnitude of passenger loss and percentage "
+    "change relative to pre-shock levels."
+)
+
 
 def render_geopolitical_page():
 
@@ -75,8 +85,16 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(timeline + markers, use_container_width=False)
-    st.caption("The figure above shows the total volume of international passengers traveling to and from the United States between 1990 and 2025. A line chart is used to represent this quantitative data as a continuous trend over time, making long-run patterns and disruptions easier to interpret. The dotted vertical lines mark the timing of two major shocks to international travel, the September 11 attacks and the COVID-19 pandemic.")
-    
+
+    st.write(
+        "The figure above shows the total volume of international passengers traveling "
+        "to and from the United States between 1990 and 2025. A line chart represents "
+        "this quantitative data as a continuous trend over time, making long-run patterns "
+        "and disruptions easier to interpret. The dotted vertical lines mark the timing "
+        "of two major shocks to international travel, the September 11 attacks and the "
+        "COVID-19 pandemic."
+    )
+
     st.markdown("")
 
     # ---------------------------
@@ -95,17 +113,17 @@ def render_geopolitical_page():
 
         pre = (
             country_year[country_year["YEAR"] == e["pre"]]
-            [["", "passengers"]]
+            [["foreign_country", "passengers"]]
             .rename(columns={"passengers": "passengers_pre"})
         )
 
         post = (
             country_year[country_year["YEAR"] == e["post"]]
-            [["", "passengers"]]
+            [["foreign_country", "passengers"]]
             .rename(columns={"passengers": "passengers_post"})
         )
 
-        merged = pre.merge(post, on="", how="outer").fillna(0)
+        merged = pre.merge(post, on="foreign_country", how="outer").fillna(0)
 
         merged["event"] = e["event"]
         merged["pre_year"] = e["pre"]
@@ -178,8 +196,21 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(bars_down, use_container_width=False)
-    
-    st.write("The figure above shows the percentage change in passenger inflows by country following the selected shock events. After the September 11 attacks, the largest declines occurred in Norway, Guyana, Belgium, Ghana, and Saudi Arabia, with Norway experiencing nearly a complete collapse in passenger inflows relative to its pre-shock baseline. These sharp contractions suggest that certain international routes were far more sensitive to security disruptions, particularly those with smaller but highly concentrated travel flows. In contrast, the period immediately following the COVID-19 pandemic reveals a much broader and more uniform collapse in international travel. Countries such as Bolivia, Hungary, Greece, Italy, and Iceland experienced declines exceeding 90 percent. Unlike the more uneven effects observed after 9/11, the pandemic produced a systemic shock that simultaneously disrupted nearly all international travel markets. This pattern reflects the global nature of travel restrictions, border closures, and demand suppression that affected the entire international aviation network rather than isolated routes or regions.")
+
+    st.write(
+        "The figure above shows the percentage change in passenger inflows by country "
+        "following the selected shock events. After the September 11 attacks, the largest "
+        "declines occurred in Norway, Guyana, Belgium, Ghana, and Saudi Arabia, with Norway "
+        "experiencing nearly a complete collapse in passenger inflows relative to its "
+        "pre-shock baseline. These sharp contractions suggest that certain international "
+        "routes were far more sensitive to security disruptions, particularly those with "
+        "smaller but highly concentrated travel flows. In contrast, the period immediately "
+        "following the COVID-19 pandemic reveals a much broader and more uniform collapse "
+        "in international travel. Countries such as Bolivia, Hungary, Greece, Italy, and "
+        "Iceland experienced declines exceeding 90 percent. Unlike the more uneven effects "
+        "observed after 9/11, the pandemic produced a systemic shock that simultaneously "
+        "disrupted nearly all international travel markets."
+    )
 
     st.markdown("")
 
@@ -231,9 +262,10 @@ def render_geopolitical_page():
     )
 
     if movers_view == "Percent change":
-        top_inc = cy_19_24.nlargest(5, "pct_change").copy()
-        top_dec = cy_19_24.nsmallest(5, "pct_change").copy()
-        movers_df = pd.concat([top_dec, top_inc], ignore_index=True).copy()
+
+        top_inc = cy_19_24.nlargest(5, "pct_change")
+        top_dec = cy_19_24.nsmallest(5, "pct_change")
+        movers_df = pd.concat([top_dec, top_inc])
 
         movers_chart = (
             alt.Chart(movers_df)
@@ -242,10 +274,8 @@ def render_geopolitical_page():
                 x=alt.X(
                     "foreign_country:N",
                     sort=alt.SortField("pct_change_pct", order="ascending"),
-                    axis=alt.Axis(
-                        labelAngle=45,
-                        labelOverlap=False,
-                        title=None
+                    axis=alt.Axis(labelAngle=45, labelOverlap=False),
+                    title=None
                 ),
                 y=alt.Y(
                     "pct_change_pct:Q",
@@ -259,16 +289,14 @@ def render_geopolitical_page():
                     alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
                 ]
             )
-            .properties(
-                width=800,
-                height=450
-            )
+            .properties(width=800, height=450)
         )
 
     else:
-        top_inc = cy_19_24.nlargest(5, "abs_change").copy()
-        top_dec = cy_19_24.nsmallest(5, "abs_change").copy()
-        movers_df = pd.concat([top_dec, top_inc], ignore_index=True).copy()
+
+        top_inc = cy_19_24.nlargest(5, "abs_change")
+        top_dec = cy_19_24.nsmallest(5, "abs_change")
+        movers_df = pd.concat([top_dec, top_inc])
 
         movers_chart = (
             alt.Chart(movers_df)
@@ -277,11 +305,8 @@ def render_geopolitical_page():
                 x=alt.X(
                     "foreign_country:N",
                     sort=alt.SortField("abs_change", order="ascending"),
-                    axis=alt.Axis(
-                        labelAngle=45,
-                        labelOverlap=False,
-                        title=None
-                    )
+                    axis=alt.Axis(labelAngle=45, labelOverlap=False),
+                    title=None
                 ),
                 y=alt.Y(
                     "abs_change:Q",
@@ -295,10 +320,7 @@ def render_geopolitical_page():
                     alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
                 ]
             )
-            .properties(
-                width=800,
-                height=450
-            )
+            .properties(width=800, height=450)
         )
 
     zero_line = alt.Chart(
