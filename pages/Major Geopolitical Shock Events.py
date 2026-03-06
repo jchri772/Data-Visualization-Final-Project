@@ -95,17 +95,17 @@ def render_geopolitical_page():
 
         pre = (
             country_year[country_year["YEAR"] == e["pre"]]
-            [["foreign_country", "passengers"]]
+            [["", "passengers"]]
             .rename(columns={"passengers": "passengers_pre"})
         )
 
         post = (
             country_year[country_year["YEAR"] == e["post"]]
-            [["foreign_country", "passengers"]]
+            [["", "passengers"]]
             .rename(columns={"passengers": "passengers_post"})
         )
 
-        merged = pre.merge(post, on="foreign_country", how="outer").fillna(0)
+        merged = pre.merge(post, on="", how="outer").fillna(0)
 
         merged["event"] = e["event"]
         merged["pre_year"] = e["pre"]
@@ -240,8 +240,10 @@ def render_geopolitical_page():
                 x=alt.X(
                     "foreign_country:N",
                     sort=alt.SortField("pct_change_pct", order="ascending"),
-                    axis=alt.Axis(labelAngle=45),
-                    title=None
+                    axis=alt.Axis(
+                        labelAngle=45,
+                        labelOverlap=False,
+                        title=None
                 ),
                 y=alt.Y(
                     "pct_change_pct:Q",
@@ -273,8 +275,11 @@ def render_geopolitical_page():
                 x=alt.X(
                     "foreign_country:N",
                     sort=alt.SortField("abs_change", order="ascending"),
-                    axis=alt.Axis(labelAngle=45),
-                    title=None
+                    axis=alt.Axis(
+                        labelAngle=45,
+                        labelOverlap=False,
+                        title=None
+                    )
                 ),
                 y=alt.Y(
                     "abs_change:Q",
