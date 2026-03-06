@@ -7,6 +7,7 @@ from utils.data_utils import get_all_data
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.write("")
 st.write("")
+st.write("Taking a deeper look, this section examines how major geopolitical shocks affected international passenger flows to and from the United States. For clarity, the analysis focuses on two major disruptions, the September 11 attacks and the COVID-19 pandemic. The first visualization presents the aggregate impact of these events on overall passenger volumes. Subsequent visuals then move to the country level, highlighting where the largest contractions occurred using measures such as magnitude of passenger loss and percentage change relative to pre-shock levels.")
 
 def render_geopolitical_page():
 
@@ -74,7 +75,8 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(timeline + markers, use_container_width=False)
-
+    st.caption("The figure above shows the total volume of international passengers traveling to and from the United States between 1990 and 2025. A line chart is used to represent this quantitative data as a continuous trend over time, making long-run patterns and disruptions easier to interpret. The dotted vertical lines mark the timing of two major shocks to international travel, the September 11 attacks and the COVID-19 pandemic.")
+    
     st.markdown("")
 
     # ---------------------------
