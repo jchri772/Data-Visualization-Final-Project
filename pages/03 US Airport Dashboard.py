@@ -29,10 +29,26 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+
 st.title("US-International Travel: Passenger Trends by US Gateway Airports (1990-2025)")
 
 st.write("While our first page analyzed the foreign countries that receive international passenger traffic to the U.S., our second dashboard explores the composition of  U.S. gateway airports that receive the same international flights. Throughout this page, we again explore trends in international traffic from 1990 through 2024. Similarly to the previous dashboard, you can narrow your selection by year and gateway airport to see detailed statistics, such as the top five airlines and the top five routes from each gateway airport. The main visual of this page is a map of the United States, which displays international passenger volume for each airport by year.")
 
+import textwrap
+
+def create_text_chart(content, fontSize=13, width_chars=140):
+        wrapped_text = textwrap.wrap(content, width=width_chars)
+        return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
+         align='left',     
+         baseline='top', 
+         fontSize=fontSize, 
+         fontWeight='normal',
+         color='#666', lineBreak='\n', x=0               
+     ).encode(
+          text='text:N'
+     ).properties(
+          width=800,        
+          height=len(wrapped_text) * (fontSize + 6))
 
 
 def render_airport_page():
@@ -259,22 +275,6 @@ def render_airport_page():
     ).properties(
         width='container',
         height=120)
-
-    import textwrap
-
-    def create_text_chart(content, fontSize=13, width_chars=140):
-        wrapped_text = textwrap.wrap(content, width=width_chars)
-        return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
-         align='left',     
-         baseline='top', 
-         fontSize=fontSize, 
-         fontWeight='normal',
-         color='#666', lineBreak='\n', x=0               
-     ).encode(
-          text='text:N'
-     ).properties(
-          width=800,        
-          height=len(wrapped_text) * (fontSize + 6))
 
     years_bar_chart_text_2 = create_text_chart("""The first figure below is identical to the first figure shown on the previous dashboard and uses a bar chart format to display the total number of international passengers flown to and from the United States each year. You may again select the year to highlight for this chart and the remaining figures using the slider at the bottom of the dashboard.""")
     map_text = create_text_chart("""Next, we explore the number of international passengers flown each year from each airport serving international flights within the United States. Each circle represents a specific airport within the United States, while the size of the circle represents the number of passengers traveling internationally to and from the airport in the selected year. Hovering over a circle displays the airport’s name, code, and the precise number of passengers flying to and from it. By selecting an airport, the three charts below, which provide greater detail into the international trends for each airport, populate. You can observe the change in the number of passengers traveling internationally from each airport—and thus how the airports that serve as the largest international gateways have changed—by changing the year using the slider at the bottom of the dashboard. From the map, we can observe that the majority of the airports with the most international passengers are, as expected, in the country’s largest cities, especially those located near the coasts or the northern or southern borders. New York JFK Airport, Miami International Airport, and Los Angeles International Airport are consistently the airports that serve the most international passengers, and all experience steady growth in the number of passengers flown.""")
