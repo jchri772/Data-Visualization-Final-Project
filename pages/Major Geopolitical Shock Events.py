@@ -332,6 +332,8 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(movers_chart + zero_line, use_container_width=False)
+    
+    st.write("")
     st.write(
             "The figure above shows how international passenger flows changed over the five years "
             "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
@@ -353,7 +355,7 @@ def render_geopolitical_page():
     # Summary
     # ---------------------------
     st.subheader("Summary: geopolitical shocks and recovery patterns")
-
+    st.write("")
     st.write(
         "This section highlights how major geopolitical shocks reshape international "
         "passenger flows in uneven ways across countries and regions. By examining both "
