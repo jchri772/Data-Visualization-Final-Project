@@ -5,7 +5,6 @@ import numpy as np
 from utils.data_utils import get_all_data
 
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
-st.write("")
 st.markdown("---")
 st.write("")
 
