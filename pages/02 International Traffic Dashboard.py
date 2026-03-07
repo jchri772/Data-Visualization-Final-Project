@@ -30,7 +30,24 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+st.write(
+    "To understand how international air travel to the United States has evolved since 1990, we first need "
+    "to examine which countries are responsible for the largest share of passenger traffic and how that "
+    "composition has changed over time. Growth in international travel does not necessarily imply that "
+    "participation has expanded evenly across the world. Instead, it may reflect stronger connectivity "
+    "between the United States and a relatively concentrated set of countries. By identifying which foreign "
+    "markets dominate passenger flows in different years, we can begin to see whether globalization in air "
+    "travel has broadened participation or reinforced existing patterns of connectivity."
+)
 
+st.write(
+    "This dashboard therefore focuses on the evolving composition of foreign passenger traffic to and from "
+    "the United States. By allowing the user to explore passenger volumes by country, airline, and route, "
+    "the visualizations help reveal which nations have become more integrated into the U.S. aviation network "
+    "and which have declined in relative importance. These patterns provide an important foundation for the "
+    "rest of the analysis, which investigates how geopolitical events, economic development, and global "
+    "mobility shocks have shaped international connectivity over the past three decades."
+)
 st.write("Our first dashboard illustrates how the composition of foreign countries with the most passengers flying to the United States has changed over time. Throughout this dashboard, you can see general trends in international passenger traffic to and from the United States from 1990 until 2024. Additionally, you can narrow down the selection by year and country to see more detailed statistics for individual nations, such as the top five routes by passenger traffic to the U.S. and the top five airlines flying between that country and the U.S. Other figures in the dashboard show the relationship of distance to the United States and income with the number of passengers flown to and from the U.S., along with the top 10 foreign countries in terms of passenger volume. You can select the year to view through the slider at the bottom of the dashboard. You may select the country to view through the dropdown menu at the bottom of the dashboard, by selecting a country from the Top 10 Countries chart, or by selecting a country from the Distance vs. Passengers Flown scatterplot.")
 
 def render_story_page():
