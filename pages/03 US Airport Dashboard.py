@@ -32,7 +32,24 @@ st.markdown("""
 
 st.title("US-International Travel: Passenger Trends by US Gateway Airports (1990-2025)")
 
-st.write("While our first page analyzed the foreign countries that receive international passenger traffic to the U.S., our second dashboard explores the composition of  U.S. gateway airports that receive the same international flights. Throughout this page, we again explore trends in international traffic from 1990 through 2024. Similarly to the previous dashboard, you can narrow your selection by year and gateway airport to see detailed statistics, such as the top five airlines and the top five routes from each gateway airport. The main visual of this page is a map of the United States, which displays international passenger volume for each airport by year.")
+st.write(
+    "To fully understand how the composition of international air travel connected to the United States "
+    "has changed since 1990, it is not enough to examine which foreign countries send passengers to the "
+    "United States. It is also important to analyze where those passengers enter the country. The location "
+    "of international gateway airports reveals how global connectivity is distributed within the United "
+    "States and whether growth in international travel has been concentrated among a small number of major "
+    "hubs or spread more broadly across the national airport network."
+)
+
+st.write(
+    "This section therefore shifts the focus from foreign countries to U.S. gateway airports that receive "
+    "international flights. By examining how passenger volumes at different airports have evolved over "
+    "time, we can observe whether globalization in air travel has reinforced the dominance of traditional "
+    "gateway hubs such as New York, Los Angeles, and Miami or whether new entry points have emerged. These "
+    "patterns help reveal how international mobility is geographically distributed within the United "
+    "States and provide an additional perspective on how global air travel networks connecting to the "
+    "United States have evolved over the past three decades."
+)
 
 import textwrap
 
