@@ -93,7 +93,8 @@ def render_geopolitical_page():
 
         st.altair_chart(timeline + markers, use_container_width=False)
 
-        st.write(
+        st.markdown(
+            "<p style='text-align: center; font-size: 12px;'><i>"
             "The figure above shows the total volume of international passengers traveling "
             "to and from the United States between 1990 and 2025. A line chart represents "
             "this quantitative data as a continuous trend over time, making long-run patterns "
@@ -102,6 +103,8 @@ def render_geopolitical_page():
             "COVID-19 pandemic. Compared with the modest decline following 9/11, the onset "
             "of COVID-19 produced a far sharper break in the series, with total international "
             "passenger volume falling by nearly 150 million in a single year."
+            "</i></p>",
+            unsafe_allow_html=True
         )
 
         st.markdown("")
@@ -205,7 +208,8 @@ def render_geopolitical_page():
 
         st.altair_chart(bars_down, use_container_width=False)
 
-        st.write(
+        st.markdown(
+            "<p style='text-align: center; font-size: 12px;'><i>"
             "The figure above shows the percentage change in passenger inflows by country "
             "following the selected shock events. After the September 11 attacks, the largest "
             "declines occurred in Norway, Guyana, Belgium, Ghana, and Saudi Arabia, with Norway "
@@ -218,6 +222,8 @@ def render_geopolitical_page():
             "Iceland experienced declines exceeding 90 percent. Unlike the more uneven effects "
             "observed after 9/11, the pandemic produced a systemic shock that simultaneously "
             "disrupted nearly all international travel markets."
+            "</i></p>",
+            unsafe_allow_html=True
         )
 
         st.markdown("")
@@ -338,7 +344,8 @@ def render_geopolitical_page():
 
         st.altair_chart(movers_chart + zero_line, use_container_width=False)
 
-        st.write(
+        st.markdown(
+            "<p style='text-align: center; font-size: 12px;'><i>"
             "The figure above shows how international passenger flows changed over the five years "
             "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
             "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
@@ -346,15 +353,20 @@ def render_geopolitical_page():
             "baselines. This contrast suggests that some travel markets were able to rebound quickly "
             "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
             "whereas others appear to have experienced more lasting structural disruption."
+            "</i></p>",
+            unsafe_allow_html=True
         )
 
-        st.write(
+        st.markdown(
+            "<p style='text-align: center; font-size: 12px;'><i>"
             "When the view is shifted to absolute magnitude, the largest passenger gains came from "
             "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
             "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
             "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
             "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
             "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
+            "</i></p>",
+            unsafe_allow_html=True
         )
 
         st.markdown("---")
