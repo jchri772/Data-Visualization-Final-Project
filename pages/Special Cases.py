@@ -18,8 +18,9 @@ st.write(
 
 st.write(
     "To make this contrast easier to interpret, the figure also includes Los Angeles (LAX) as a benchmark "
-    "major international gateway. The vertical scale is fixed using only the four special-case airports, "
-    "so LAX extends beyond that range and visually emphasizes how much larger its international recovery was."
+    "major international gateway. Because passenger volumes differ dramatically across these airports, "
+    "the vertical axis uses a logarithmic scale so that both large and small airports can be visualized "
+    "simultaneously."
 )
 
 
@@ -52,28 +53,28 @@ def render_special_case_airports():
     )
 
     special_df["airport_label"] = special_df["US_AIRPORT"].map(airport_labels)
+
     special_df["line_type"] = special_df["US_AIRPORT"].apply(
         lambda x: "Benchmark" if x == "LAX" else "Special case"
     )
 
-    special_only_max = special_df.loc[
-        special_df["US_AIRPORT"].isin(["CVG", "PIT", "MEM", "STL"]),
-        "passengers"
-    ].max()
-
-    y_max = special_only_max * 1.10
-
     line_chart = (
         alt.Chart(special_df)
-        .mark_line(point=True, clip=False)
+        .mark_line(point=True)
         .encode(
-            x=alt.X("YEAR:O", title="Year"),
+            x=alt.X(
+                "YEAR:O",
+                title="Year"
+            ),
             y=alt.Y(
                 "passengers:Q",
-                title="International passengers",
-                scale=alt.Scale(domain=[0, y_max], clamp=False)
+                title="International passengers (log scale)",
+                scale=alt.Scale(type="log")
             ),
-            color=alt.Color("airport_label:N", title="Airport"),
+            color=alt.Color(
+                "airport_label:N",
+                title="Airport"
+            ),
             strokeDash=alt.StrokeDash(
                 "line_type:N",
                 title=None,
@@ -100,8 +101,9 @@ def render_special_case_airports():
         "<p style='text-align: center; font-size: 12px;'><i>"
         "The figure above compares international passenger volumes at four U.S. airports with irregular "
         "post-COVID recovery patterns between 2019 and 2024, while also including Los Angeles (LAX) as a "
-        "benchmark major gateway. The y-axis is scaled to the four special-case airports only, so LAX rises "
-        "beyond the plotted range and makes the contrast in recovery scale immediately visible."
+        "benchmark major gateway. The logarithmic scale allows both large and small airports to be shown "
+        "in the same visualization, highlighting how much weaker the recovery has been at Cincinnati, "
+        "Pittsburgh, Memphis, and St. Louis relative to a major international hub."
         "</i></p>",
         unsafe_allow_html=True
     )
