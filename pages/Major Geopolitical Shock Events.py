@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from utils.data_utils import get_all_data
 
+st.write("DEBUG 0: file loaded")
+
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.write("")
 st.write("")
@@ -20,8 +22,10 @@ st.write(
 
 
 def render_geopolitical_page():
+    st.write("DEBUG 1: render_geopolitical_page started")
 
     pax_by_country, pax_by_airport, us_airport_map, new_data = get_all_data()
+    st.write("DEBUG 2: get_all_data completed")
 
     alt.data_transformers.disable_max_rows()
 
@@ -58,6 +62,8 @@ def render_geopolitical_page():
         .agg(total_passengers=("passengers", "sum"))
     )
 
+    st.write("DEBUG 3: country_year and global_year built")
+
     # ---------------------------
     # Global timeline
     # ---------------------------
@@ -93,10 +99,11 @@ def render_geopolitical_page():
         "and disruptions easier to interpret. The dotted vertical lines mark the timing "
         "of two major shocks to international travel, the September 11 attacks and the "
         "COVID-19 pandemic. As one can see, 9/11 had a much more modest dip in airfare "
-        "compared to COVID which saw a decline of nearly 150 million passengers in a single "
-        "year"
+        "compared to COVID, which saw a decline of nearly 150 million passengers in a single "
+        "year."
     )
 
+    st.write("DEBUG 4: finished global timeline")
     st.markdown("")
 
     # ---------------------------
@@ -112,7 +119,6 @@ def render_geopolitical_page():
     shocks_list = []
 
     for e in event_windows:
-
         pre = (
             country_year[country_year["YEAR"] == e["pre"]]
             [["foreign_country", "passengers"]]
@@ -148,7 +154,8 @@ def render_geopolitical_page():
     selected_event = st.selectbox(
         "Shock event:",
         options=shock_events,
-        index=shock_events.index("COVID") if "COVID" in shock_events else 0
+        index=shock_events.index("COVID") if "COVID" in shock_events else 0,
+        key="shock_event_select"
     )
 
     BASELINE_MIN = 50_000
@@ -214,6 +221,7 @@ def render_geopolitical_page():
         "disrupted nearly all international travel markets."
     )
 
+    st.write("DEBUG 5: finished shock collapses")
     st.markdown("")
 
     # ---------------------------
@@ -260,11 +268,11 @@ def render_geopolitical_page():
     movers_view = st.selectbox(
         "Post-COVID movers view:",
         options=["Percent change", "Magnitude change"],
-        index=0
+        index=0,
+        key="post_covid_movers_view"
     )
 
     if movers_view == "Percent change":
-
         top_inc = cy_19_24.nlargest(5, "pct_change")
         top_dec = cy_19_24.nsmallest(5, "pct_change")
         movers_df = pd.concat([top_dec, top_inc])
@@ -293,9 +301,7 @@ def render_geopolitical_page():
             )
             .properties(width=800, height=450)
         )
-
     else:
-
         top_inc = cy_19_24.nlargest(5, "abs_change")
         top_dec = cy_19_24.nsmallest(5, "abs_change")
         movers_df = pd.concat([top_dec, top_inc])
@@ -325,14 +331,15 @@ def render_geopolitical_page():
             .properties(width=800, height=450)
         )
 
-        zero_line = alt.Chart(
+    # zero_line must be outside the if/else so it always exists
+    zero_line = alt.Chart(
         pd.DataFrame({"y": [0]})
     ).mark_rule(strokeDash=[4, 4]).encode(
         y="y:Q"
     )
 
     st.altair_chart(movers_chart + zero_line, use_container_width=False)
-    st.write("DEBUG 5: finished post-COVID chart")
+    st.write("DEBUG 6: finished post-COVID chart")
 
     st.write("")
     st.write(
@@ -354,7 +361,7 @@ def render_geopolitical_page():
         "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
     )
 
-    st.write("DEBUG 6: reached summary section")
+    st.write("DEBUG 7: reached summary section")
     st.markdown("---")
     st.subheader("Summary: geopolitical shocks and recovery patterns")
     st.write(
@@ -371,5 +378,8 @@ def render_geopolitical_page():
         "shaped not only by economic demand but also by political and institutional forces "
         "that govern cross-border mobility."
     )
+
+    st.write("DEBUG 8: page finished successfully")
+
 
 render_geopolitical_page()
