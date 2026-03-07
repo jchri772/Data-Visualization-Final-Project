@@ -93,7 +93,8 @@ def render_geopolitical_page():
 
         st.altair_chart(timeline + markers, use_container_width=False)
 
-        st.write(
+        st.markdown(
+            "<p style='text-align: center; font-size: 14px;'>"
             "The figure above shows the total volume of international passengers traveling "
             "to and from the United States between 1990 and 2025. A line chart represents "
             "this quantitative data as a continuous trend over time, making long-run patterns "
@@ -102,6 +103,8 @@ def render_geopolitical_page():
             "COVID-19 pandemic. Compared with the modest decline following 9/11, the onset "
             "of COVID-19 produced a far sharper break in the series, with total international "
             "passenger volume falling by nearly 150 million in a single year."
+            "</p>",
+            unsafe_allow_html=True
         )
 
         st.markdown("")
