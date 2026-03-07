@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 from utils.data_utils import get_all_data
 
-st.write("DEBUG 0: file loaded")
-
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.write("")
 st.write("")
@@ -22,7 +20,6 @@ st.write(
 
 
 def render_geopolitical_page():
-    st.write("DEBUG 1: render_geopolitical_page started")
 
     pax_by_country, pax_by_airport, us_airport_map, new_data = get_all_data()
     st.write("DEBUG 2: get_all_data completed")
@@ -103,8 +100,8 @@ def render_geopolitical_page():
         "year."
     )
 
-    st.write("DEBUG 4: finished global timeline")
     st.markdown("")
+    st.markdown("---")
 
     # ---------------------------
     # Shock collapses
@@ -221,8 +218,8 @@ def render_geopolitical_page():
         "disrupted nearly all international travel markets."
     )
 
-    st.write("DEBUG 5: finished shock collapses")
     st.markdown("")
+    st.markdown("---")
 
     # ---------------------------
     # Post-COVID movers
@@ -339,7 +336,6 @@ def render_geopolitical_page():
     )
 
     st.altair_chart(movers_chart + zero_line, use_container_width=False)
-    st.write("DEBUG 6: finished post-COVID chart")
 
     st.write("")
     st.write(
@@ -361,7 +357,6 @@ def render_geopolitical_page():
         "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
     )
 
-    st.write("DEBUG 7: reached summary section")
     st.markdown("---")
     st.subheader("Summary: geopolitical shocks and recovery patterns")
     st.write(
@@ -379,7 +374,6 @@ def render_geopolitical_page():
         "that govern cross-border mobility."
     )
 
-    st.write("DEBUG 8: page finished successfully")
 
 
 render_geopolitical_page()
