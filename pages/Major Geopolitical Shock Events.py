@@ -6,6 +6,7 @@ from utils.data_utils import get_all_data
 
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.write("")
+st.markdown("---")
 st.write("")
 
 st.write(
@@ -27,7 +28,6 @@ st.write(
     "levels. By identifying which countries were most affected, this analysis helps reveal how global "
     "connectivity to the United States has been reshaped by major geopolitical events."
 )
-
 
 def render_geopolitical_page():
     try:
@@ -68,6 +68,7 @@ def render_geopolitical_page():
         # ---------------------------
         # Global timeline
         # ---------------------------
+        st.markdown("---")
         st.subheader("International passengers to and from the U.S. (1990–2025)")
 
         events = pd.DataFrame({
@@ -105,6 +106,7 @@ def render_geopolitical_page():
         )
 
         st.markdown("")
+        st.markdown("---")
 
         # ---------------------------
         # Shock collapses
@@ -218,6 +220,7 @@ def render_geopolitical_page():
         )
 
         st.markdown("")
+        st.markdown("---")
 
         # ---------------------------
         # Post-COVID movers
