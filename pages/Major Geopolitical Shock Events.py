@@ -93,15 +93,8 @@ def render_geopolitical_page():
     st.altair_chart(timeline + markers, use_container_width=False)
 
     st.write(
-        "The figure above shows the total volume of international passengers traveling "
-        "to and from the United States between 1990 and 2025. A line chart represents "
-        "this quantitative data as a continuous trend over time, making long-run patterns "
-        "and disruptions easier to interpret. The dotted vertical lines mark the timing "
-        "of two major shocks to international travel, the September 11 attacks and the "
-        "COVID-19 pandemic. As one can see, 9/11 had a much more modest dip in airfare "
-        "compared to COVID, which saw a decline of nearly 150 million passengers in a single "
-        "year."
-    )
+    "TEST LINE. If you can read this sentence, the app is loading the newest version of the file. COVID caused a drop of nearly 150 million passengers in one year."
+)
 
     st.write("DEBUG 4: finished global timeline")
     st.markdown("")
