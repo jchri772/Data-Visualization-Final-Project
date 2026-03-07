@@ -325,37 +325,38 @@ def render_geopolitical_page():
             .properties(width=800, height=450)
         )
 
-    zero_line = alt.Chart(
+        zero_line = alt.Chart(
         pd.DataFrame({"y": [0]})
     ).mark_rule(strokeDash=[4, 4]).encode(
         y="y:Q"
     )
 
     st.altair_chart(movers_chart + zero_line, use_container_width=False)
-    
+    st.write("DEBUG 5: finished post-COVID chart")
+
     st.write("")
     st.write(
-            "The figure above shows how international passenger flows changed over the five years "
-            "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
-            "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
-            "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
-            "baselines. This contrast suggests that some travel markets were able to rebound quickly "
-            "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
-            "whereas others appear to have experienced more lasting structural disruption."
-   
-            "When the view is shifted to absolute magnitude, the largest passenger gains came from "
-            "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
-            "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
-            "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
-            "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
-            "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
-        )
+        "The figure above shows how international passenger flows changed over the five years "
+        "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
+        "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
+        "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
+        "baselines. This contrast suggests that some travel markets were able to rebound quickly "
+        "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
+        "whereas others appear to have experienced more lasting structural disruption."
+    )
 
-    # ---------------------------
-    # Summary
-    # ---------------------------
+    st.write(
+        "When the view is shifted to absolute magnitude, the largest passenger gains came from "
+        "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
+        "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
+        "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
+        "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
+        "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
+    )
+
+    st.write("DEBUG 6: reached summary section")
+    st.markdown("---")
     st.subheader("Summary: geopolitical shocks and recovery patterns")
-    st.write("")
     st.write(
         "This section highlights how major geopolitical shocks reshape international "
         "passenger flows in uneven ways across countries and regions. By examining both "
