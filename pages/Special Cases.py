@@ -17,10 +17,10 @@ st.write(
 )
 
 st.write(
-    "In particular, these airports help illustrate how international connectivity can erode when an "
-    "airport loses hub status, sees reduced carrier commitment, or occupies a weaker position in the "
-    "national aviation system. Their trajectories suggest that recovery after COVID was shaped not only "
-    "by the return of demand, but also by longer-run structural changes in airline networks."
+    "To make this contrast easier to interpret, the figure also includes Los Angeles (LAX) as a benchmark "
+    "major international gateway. Comparing these former or weaker secondary hubs against LAX helps show "
+    "more clearly that their subdued recovery was not simply part of a universal national pattern, but "
+    "instead reflects the uneven geography of post-pandemic international air travel recovery."
 )
 
 
@@ -29,20 +29,21 @@ def render_special_case_airports():
 
     alt.data_transformers.disable_max_rows()
 
-    special_airports = ["CVG", "PIT", "MEM", "STL"]
+    selected_airports = ["CVG", "PIT", "MEM", "STL", "LAX"]
 
     airport_labels = {
         "CVG": "CVG (Cincinnati)",
         "PIT": "PIT (Pittsburgh)",
         "MEM": "MEM (Memphis)",
-        "STL": "STL (St. Louis)"
+        "STL": "STL (St. Louis)",
+        "LAX": "LAX (Los Angeles, benchmark)"
     }
 
     special_df = pax_by_airport.copy()
     special_df.columns = [c.strip() for c in special_df.columns]
 
     special_df = special_df[
-        (special_df["US_AIRPORT"].isin(special_airports)) &
+        (special_df["US_AIRPORT"].isin(selected_airports)) &
         (special_df["YEAR"].between(2019, 2024))
     ].copy()
 
@@ -52,22 +53,24 @@ def render_special_case_airports():
     )
 
     special_df["airport_label"] = special_df["US_AIRPORT"].map(airport_labels)
+    special_df["line_type"] = special_df["US_AIRPORT"].apply(
+        lambda x: "Benchmark" if x == "LAX" else "Special case"
+    )
 
     line_chart = (
         alt.Chart(special_df)
         .mark_line(point=True)
         .encode(
-            x=alt.X(
-                "YEAR:O",
-                title="Year"
-            ),
-            y=alt.Y(
-                "passengers:Q",
-                title="International passengers"
-            ),
-            color=alt.Color(
-                "airport_label:N",
-                title="Airport"
+            x=alt.X("YEAR:O", title="Year"),
+            y=alt.Y("passengers:Q", title="International passengers"),
+            color=alt.Color("airport_label:N", title="Airport"),
+            strokeDash=alt.StrokeDash(
+                "line_type:N",
+                title=None,
+                scale=alt.Scale(
+                    domain=["Special case", "Benchmark"],
+                    range=[[1, 0], [6, 4]]
+                )
             ),
             tooltip=[
                 alt.Tooltip("YEAR:O", title="Year"),
@@ -86,10 +89,11 @@ def render_special_case_airports():
     st.markdown(
         "<p style='text-align: center; font-size: 12px;'><i>"
         "The figure above compares international passenger volumes at four U.S. airports with irregular "
-        "post-COVID recovery patterns between 2019 and 2024. Unlike major international gateways that "
-        "rebounded more strongly, Cincinnati, Pittsburgh, Memphis, and St. Louis remain useful special "
-        "cases because they reflect longer-run structural weakness in international service, likely tied "
-        "to hub loss, network restructuring, and reduced airline emphasis."
+        "post-COVID recovery patterns between 2019 and 2024, while also including Los Angeles (LAX) as a "
+        "benchmark major gateway. Relative to LAX’s stronger recovery, Cincinnati, Pittsburgh, Memphis, "
+        "and St. Louis display much weaker post-pandemic trajectories, reinforcing the argument that "
+        "international traffic recovery has been highly uneven across U.S. airports and shaped by longer-run "
+        "differences in airline network importance."
         "</i></p>",
         unsafe_allow_html=True
     )
