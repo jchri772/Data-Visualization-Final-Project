@@ -322,6 +322,26 @@ def render_geopolitical_page():
 
             st.write("DEBUG THIRD SECTION OK")
 
+            st.markdown("---")
+            st.subheader("Summary: geopolitical shocks and recovery patterns")
+
+            st.write(
+            "This section highlights how major geopolitical shocks reshape international "
+            "passenger flows in uneven ways across countries and regions. By examining both "
+            "the immediate contractions and the longer-run recovery patterns, the analysis "
+            "reveals how underlying policy environments, including immigration policy, visa "
+            "regimes, and tourism dependence, influence the resilience of travel markets. "
+            "Countries with strong tourism sectors tend to recover more quickly as leisure "
+            "demand rebounds once travel restrictions ease. In contrast, countries where "
+            "travel flows are more closely tied to immigration policy, geopolitical tensions, "
+            "or refugee movements often experience slower or more policy-dependent recoveries. "
+            "Taken together, these patterns suggest that international aviation networks are "
+            "shaped not only by economic demand but also by political and institutional forces "
+            "that govern cross-border mobility."
+        )
+
+            st.write("DEBUG SUMMARY OK")
+
         except Exception as e:
             st.error("Third section crashed. Exact error below.")
             st.exception(e)
