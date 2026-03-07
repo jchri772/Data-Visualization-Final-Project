@@ -373,5 +373,4 @@ def render_geopolitical_page():
         "that govern cross-border mobility."
     )
 
-
 render_geopolitical_page()
