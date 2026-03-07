@@ -30,6 +30,11 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.title("US-International Travel: Passenger Trends by US Gateway Airports (1990-2025)")
+
+st.write("While our first page analyzed the foreign countries that receive international passenger traffic to the U.S., our second dashboard explores the composition of  U.S. gateway airports that receive the same international flights. Throughout this page, we again explore trends in international traffic from 1990 through 2024. Similarly to the previous dashboard, you can narrow your selection by year and gateway airport to see detailed statistics, such as the top five airlines and the top five routes from each gateway airport. The main visual of this page is a map of the United States, which displays international passenger volume for each airport by year.")
+
+
+
 def render_airport_page():
     pax_by_country, pax_by_airport, us_airport_map, new_data = get_all_data()
 
@@ -255,10 +260,15 @@ def render_airport_page():
         width='container',
         height=120)
 
-    dashboard = (years_bar_chart & 
-                 map_chart & 
-                 airport_label_block & 
-                 line_graph_by_airport & 
+    years_bar_chart_text_2 = create_text_chart("""The first figure below is identical to the first figure shown on the previous dashboard and uses a bar chart format to display the total number of international passengers flown to and from the United States each year. You may again select the year to highlight for this chart and the remaining figures using the slider at the bottom of the dashboard.""")
+    map_text = create_text_chart("""Next, we explore the number of international passengers flown each year from each airport serving international flights within the United States. Each circle represents a specific airport within the United States, while the size of the circle represents the number of passengers traveling internationally to and from the airport in the selected year. Hovering over a circle displays the airport’s name, code, and the precise number of passengers flying to and from it. By selecting an airport, the three charts below, which provide greater detail into the international trends for each airport, populate. You can observe the change in the number of passengers traveling internationally from each airport—and thus how the airports that serve as the largest international gateways have changed—by changing the year using the slider at the bottom of the dashboard. From the map, we can observe that the majority of the airports with the most international passengers are, as expected, in the country’s largest cities, especially those located near the coasts or the northern or southern borders. New York JFK Airport, Miami International Airport, and Los Angeles International Airport are consistently the airports that serve the most international passengers, and all experience steady growth in the number of passengers flown.""")
+    line_plot_text = create_text_chart("""The figures below populate once you select an airport from the map above. We next explore how trends change at the airport level; the line chart compares the year with the number of passengers flown internationally to and from the selected airport. At many airports, such as Atlanta and Washington Dulles, we see mostly steady growth in international passengers over time—though as seen in the previous dashboard, there are consistent decreases in 2020 due to the COVID-19 pandemic. New York JFK and Newark appear to be the airports with the greatest decreases in annual passengers in 2001 and 2002, which correlates with the September 11 attacks; both experienced roughly 15% decreases in passengers in 2001 compared to 2000. A number of airports also experience large shocks in international passenger volume within narrow timeframes. For example, St. Louis, Pittsburgh, Memphis, and Cincinnati all saw significant decreases that correlate with airlines closing down their local hubs. In recent years, several airports have experienced significant growth from historically low levels; these include Austin, Denver, Nashville, and San Diego, among others.""")
+    bar_charts_specific_text = create_text_chart("""Lastly, in the charts below, we use a bar chart on the left to explore the five top airlines by international passenger volume from the selected U.S. airport, while the bar chart on the right explores the top five international destinations. You can observe that while some airports have international traffic dominated by a single carrier, many have a more even mix of airlines. For example, hub airports such as Atlanta, Charlotte, Miami, and Houston have international traffic dominated by the specific U.S. airline that maintains a hub there. Meanwhile, several airports have a more balanced mix of international passengers; these include hubs for multiple airlines, such as Chicago O’Hare, New York JFK, Los Angeles, and Boston. This also includes smaller airports like Nashville, Austin, Cleveland, and Raleigh, which see a mix of domestic and foreign carriers as their largest international operators. Additionally, while there is a diverse range of top destinations depending on the U.S. gateway, London, Paris, Frankfurt, and Cancun are among the most common foreign airports with the highest service levels from the selected U.S. airports.""")
+
+    dashboard = (years_bar_chart_text_2 & years_bar_chart & 
+                 map_text & map_chart & 
+                 airport_label_block & line_plot_text &
+                 line_graph_by_airport & bar_charts_specific_text &
                  bar_graph_top_airlines_label_block &
                  (bar_graph_top_airlines | bar_graph_top_destinations) & 
                  spacer).resolve_scale(
@@ -267,4 +277,9 @@ def render_airport_page():
 
     st.altair_chart(dashboard, use_container_width=True)
 
+    
+
 render_airport_page()
+
+st.write("The figures above demonstrate that similarly to how international traffic is concentrated in a few foreign countries, the distribution of U.S. gateway airports is also highly concentrated. While the top three gateways, New York JFK, Los Angeles, and Miami, have remained the leaders throughout the entire period analyzed, there has been significant change in the composition of secondary gateway airports. Some airports that previously served as secondary hubs, such as Cincinnati or Pittsburgh, now see very few international passengers. Conversely, other airports that previously had minimal international service, such as Austin or Nashville, have now emerged as significant secondary gateways.")
+
