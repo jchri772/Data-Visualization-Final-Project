@@ -322,7 +322,7 @@ def render_geopolitical_page():
 
             st.write("DEBUG THIRD SECTION OK")
 
-        except Exception as e:
+    except Exception as e:
             st.error("Third section crashed. Exact error below.")
             st.exception(e)
 
