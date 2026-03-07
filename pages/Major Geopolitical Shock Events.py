@@ -9,13 +9,23 @@ st.write("")
 st.write("")
 
 st.write(
-    "Taking a deeper look, this section examines how major geopolitical shocks affected "
-    "international passenger flows to and from the United States. For clarity, the analysis "
-    "focuses on two major disruptions, the September 11 attacks and the COVID-19 pandemic. "
-    "The first visualization presents the aggregate impact of these events on overall passenger "
-    "volumes. Subsequent visuals then move to the country level, highlighting where the largest "
-    "contractions occurred using measures such as magnitude of passenger loss and percentage "
-    "change relative to pre-shock levels."
+    "This section investigates how major geopolitical shocks altered the composition of international "
+    "air travel connected to the United States. Because our research question asks which countries have "
+    "experienced the largest increases or declines in flight activity since 1990, it is important to "
+    "examine moments when global mobility was suddenly disrupted. Events such as the September 11 attacks "
+    "and the COVID-19 pandemic produced sharp contractions in international travel, but these disruptions "
+    "did not affect all countries equally. Some markets recovered quickly while others experienced longer "
+    "lasting declines, potentially reflecting differences in tourism demand, migration patterns, airline "
+    "networks, or geopolitical conditions."
+)
+
+st.write(
+    "The first visualization shows the aggregate trajectory of international passenger flows to and from "
+    "the United States, highlighting how overall travel volumes changed during these shocks. The following "
+    "visualizations then move to the country level to identify where the largest contractions occurred, "
+    "measured both by the magnitude of passenger losses and by percentage change relative to pre-shock "
+    "levels. By identifying which countries were most affected, this analysis helps reveal how global "
+    "connectivity to the United States has been reshaped by major geopolitical events."
 )
 
 
