@@ -4,11 +4,41 @@ import pandas as pd
 import numpy as np
 from utils.data_utils import get_all_data
 
+CHART_WIDTH = 850
+TEXT_WIDTH = 850
+
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.markdown("---")
-st.write("")
 
-st.write(
+
+def centered_text(text, font_size=15, color="#262730"):
+    st.markdown(
+        f"""
+        <div style="
+            max-width: {TEXT_WIDTH}px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: {font_size}px;
+            line-height: 1.7;
+            color: {color};
+        ">
+            {text}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+def centered_chart(chart):
+    left, middle, right = st.columns([1, 12, 1])
+    with middle:
+        st.altair_chart(
+            chart.properties(width=CHART_WIDTH),
+            use_container_width=False
+        )
+
+
+centered_text(
     "This section investigates how major geopolitical shocks altered the composition of international "
     "air travel connected to the United States. Because our research question asks which countries have "
     "experienced the largest increases or declines in flight activity since 1990, it is important to "
@@ -19,7 +49,7 @@ st.write(
     "networks, or geopolitical conditions."
 )
 
-st.write(
+centered_text(
     "The first visualization shows the aggregate trajectory of international passenger flows to and from "
     "the United States, highlighting how overall travel volumes changed during these shocks. The following "
     "visualizations then move to the country level to identify where the largest contractions occurred, "
@@ -27,6 +57,7 @@ st.write(
     "levels. By identifying which countries were most affected, this analysis helps reveal how global "
     "connectivity to the United States has been reshaped by major geopolitical events."
 )
+
 
 def render_geopolitical_page():
     try:
@@ -80,7 +111,7 @@ def render_geopolitical_page():
             y=alt.Y("total_passengers:Q", title="Total international passengers"),
             tooltip=["YEAR:Q", alt.Tooltip("total_passengers:Q", format=",.0f")]
         ).properties(
-            width=800,
+            width=CHART_WIDTH,
             height=260
         )
 
@@ -91,10 +122,9 @@ def render_geopolitical_page():
             tooltip=["event:N", "YEAR:Q"]
         )
 
-        st.altair_chart(timeline + markers, use_container_width=False)
+        centered_chart(timeline + markers)
 
-        st.markdown(
-            "<p style='text-align: center; font-size: 14px;'>"
+        centered_text(
             "The figure above shows the total volume of international passengers traveling "
             "to and from the United States between 1990 and 2025. A line chart represents "
             "this quantitative data as a continuous trend over time, making long-run patterns "
@@ -102,12 +132,10 @@ def render_geopolitical_page():
             "of two major shocks to international travel, the September 11 attacks and the "
             "COVID-19 pandemic. Compared with the modest decline following 9/11, the onset "
             "of COVID-19 produced a far sharper break in the series, with total international "
-            "passenger volume falling by nearly 150 million in a single year."
-            "</p>",
-            unsafe_allow_html=True
+            "passenger volume falling by nearly 150 million in a single year.",
+            font_size=14
         )
 
-        st.markdown("")
         st.markdown("---")
 
         # ---------------------------
@@ -201,14 +229,14 @@ def render_geopolitical_page():
                     alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
                 ]
             )
-            .properties(width=800, height=450)
+            .properties(width=CHART_WIDTH, height=450)
         )
 
-        st.altair_chart(bars_down, use_container_width=False)
+        centered_chart(bars_down)
 
-        st.write(
+        centered_text(
             "The figure above shows the percentage change in passenger inflows by country "
-            "following the selected shock events. After the September 11 attacks, the largest "
+            "following the selected shock event. After the September 11 attacks, the largest "
             "declines occurred in Norway, Guyana, Belgium, Ghana, and Saudi Arabia, with Norway "
             "experiencing nearly a complete collapse in passenger inflows relative to its "
             "pre-shock baseline. These sharp contractions suggest that certain international "
@@ -218,10 +246,10 @@ def render_geopolitical_page():
             "in international travel. Countries such as Bolivia, Hungary, Greece, Italy, and "
             "Iceland experienced declines exceeding 90 percent. Unlike the more uneven effects "
             "observed after 9/11, the pandemic produced a systemic shock that simultaneously "
-            "disrupted nearly all international travel markets."
+            "disrupted nearly all international travel markets.",
+            font_size=14
         )
 
-        st.markdown("")
         st.markdown("---")
 
         # ---------------------------
@@ -299,7 +327,7 @@ def render_geopolitical_page():
                         alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
                     ]
                 )
-                .properties(width=800, height=450)
+                .properties(width=CHART_WIDTH, height=450)
             )
         else:
             top_inc = cy_19_24.nlargest(5, "abs_change")
@@ -328,7 +356,7 @@ def render_geopolitical_page():
                         alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
                     ]
                 )
-                .properties(width=800, height=450)
+                .properties(width=CHART_WIDTH, height=450)
             )
 
         zero_line = alt.Chart(
@@ -337,31 +365,33 @@ def render_geopolitical_page():
             y="y:Q"
         )
 
-        st.altair_chart(movers_chart + zero_line, use_container_width=False)
+        centered_chart(movers_chart + zero_line)
 
-        st.write(
+        centered_text(
             "The figure above shows how international passenger flows changed over the five years "
             "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
             "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
             "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
             "baselines. This contrast suggests that some travel markets were able to rebound quickly "
             "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
-            "whereas others appear to have experienced more lasting structural disruption."
+            "whereas others appear to have experienced more lasting structural disruption.",
+            font_size=14
         )
 
-        st.write(
+        centered_text(
             "When the view is shifted to absolute magnitude, the largest passenger gains came from "
             "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
             "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
             "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
             "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
-            "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
+            "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors.",
+            font_size=14
         )
 
         st.markdown("---")
         st.subheader("Summary: geopolitical shocks and recovery patterns")
 
-        st.write(
+        centered_text(
             "This section highlights how major geopolitical shocks reshape international "
             "passenger flows in uneven ways across countries and regions. By examining both "
             "the immediate contractions and the longer-run recovery patterns, the analysis "
