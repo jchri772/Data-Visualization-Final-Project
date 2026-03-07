@@ -18,9 +18,8 @@ st.write(
 
 st.write(
     "To make this contrast easier to interpret, the figure also includes Los Angeles (LAX) as a benchmark "
-    "major international gateway. Comparing these former or weaker secondary hubs against LAX helps show "
-    "more clearly that their subdued recovery was not simply part of a universal national pattern, but "
-    "instead reflects the uneven geography of post-pandemic international air travel recovery."
+    "major international gateway. The vertical scale is fixed using only the four special-case airports, "
+    "so LAX extends beyond that range and visually emphasizes how much larger its international recovery was."
 )
 
 
@@ -57,12 +56,23 @@ def render_special_case_airports():
         lambda x: "Benchmark" if x == "LAX" else "Special case"
     )
 
+    special_only_max = special_df.loc[
+        special_df["US_AIRPORT"].isin(["CVG", "PIT", "MEM", "STL"]),
+        "passengers"
+    ].max()
+
+    y_max = special_only_max * 1.10
+
     line_chart = (
         alt.Chart(special_df)
-        .mark_line(point=True)
+        .mark_line(point=True, clip=False)
         .encode(
             x=alt.X("YEAR:O", title="Year"),
-            y=alt.Y("passengers:Q", title="International passengers"),
+            y=alt.Y(
+                "passengers:Q",
+                title="International passengers",
+                scale=alt.Scale(domain=[0, y_max], clamp=False)
+            ),
             color=alt.Color("airport_label:N", title="Airport"),
             strokeDash=alt.StrokeDash(
                 "line_type:N",
@@ -90,10 +100,8 @@ def render_special_case_airports():
         "<p style='text-align: center; font-size: 12px;'><i>"
         "The figure above compares international passenger volumes at four U.S. airports with irregular "
         "post-COVID recovery patterns between 2019 and 2024, while also including Los Angeles (LAX) as a "
-        "benchmark major gateway. Relative to LAX’s stronger recovery, Cincinnati, Pittsburgh, Memphis, "
-        "and St. Louis display much weaker post-pandemic trajectories, reinforcing the argument that "
-        "international traffic recovery has been highly uneven across U.S. airports and shaped by longer-run "
-        "differences in airline network importance."
+        "benchmark major gateway. The y-axis is scaled to the four special-case airports only, so LAX rises "
+        "beyond the plotted range and makes the contrast in recovery scale immediately visible."
         "</i></p>",
         unsafe_allow_html=True
     )
