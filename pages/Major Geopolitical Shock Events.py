@@ -177,141 +177,153 @@ def render_geopolitical_page():
         # ---------------------------
         # Post-COVID movers
         # ---------------------------
-        st.subheader("Top post-COVID movers (2019 → 2024)")
+        try:
+            st.write("DEBUG: entering third section")
+            st.subheader("Top post-COVID movers (2019 → 2024)")
+            st.write("DEBUG: third subheader rendered")
 
-        PRE_YEAR = 2019
-        POST_YEAR = 2024
+            PRE_YEAR = 2019
+            POST_YEAR = 2024
 
-        cy_19_24 = (
-            country_year[country_year["YEAR"].isin([PRE_YEAR, POST_YEAR])]
-            .pivot_table(
-                index="foreign_country",
-                columns="YEAR",
-                values="passengers",
-                aggfunc="sum"
-            )
-            .reset_index()
-            .rename(columns={
-                PRE_YEAR: "passengers_pre",
-                POST_YEAR: "passengers_post"
-            })
-            .fillna(0)
-        )
-
-        cy_19_24["abs_change"] = (
-            cy_19_24["passengers_post"] - cy_19_24["passengers_pre"]
-        )
-
-        cy_19_24["pct_change"] = np.where(
-            cy_19_24["passengers_pre"] > 0,
-            cy_19_24["abs_change"] / cy_19_24["passengers_pre"],
-            np.nan
-        )
-
-        cy_19_24["pct_change_pct"] = 100 * cy_19_24["pct_change"]
-
-        BASELINE_MIN_POSTCOVID = 50_000
-        cy_19_24 = cy_19_24[
-            cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID
-        ].copy()
-
-        movers_view = st.selectbox(
-            "Post-COVID movers view:",
-            options=["Percent change", "Magnitude change"],
-            index=0,
-            key="post_covid_movers_view"
-        )
-
-        if movers_view == "Percent change":
-            top_inc = cy_19_24.nlargest(5, "pct_change")
-            top_dec = cy_19_24.nsmallest(5, "pct_change")
-            movers_df = pd.concat([top_dec, top_inc])
-
-            movers_chart = (
-                alt.Chart(movers_df)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        "foreign_country:N",
-                        sort=alt.SortField("pct_change_pct", order="ascending"),
-                        axis=alt.Axis(labelAngle=45, labelOverlap=False),
-                        title=None
-                    ),
-                    y=alt.Y(
-                        "pct_change_pct:Q",
-                        title="Percent change (2019 → 2024)"
-                    ),
-                    tooltip=[
-                        "foreign_country:N",
-                        alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
-                        alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
-                        alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
-                        alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
-                    ]
+            cy_19_24 = (
+                country_year[country_year["YEAR"].isin([PRE_YEAR, POST_YEAR])]
+                .pivot_table(
+                    index="foreign_country",
+                    columns="YEAR",
+                    values="passengers",
+                    aggfunc="sum"
                 )
-                .properties(width=800, height=450)
+                .reset_index()
+                .rename(columns={
+                    PRE_YEAR: "passengers_pre",
+                    POST_YEAR: "passengers_post"
+                })
+                .fillna(0)
             )
-        else:
-            top_inc = cy_19_24.nlargest(5, "abs_change")
-            top_dec = cy_19_24.nsmallest(5, "abs_change")
-            movers_df = pd.concat([top_dec, top_inc])
 
-            movers_chart = (
-                alt.Chart(movers_df)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        "foreign_country:N",
-                        sort=alt.SortField("abs_change", order="ascending"),
-                        axis=alt.Axis(labelAngle=45, labelOverlap=False),
-                        title=None
-                    ),
-                    y=alt.Y(
-                        "abs_change:Q",
-                        title="Passenger change (2019 → 2024)"
-                    ),
-                    tooltip=[
-                        "foreign_country:N",
-                        alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
-                        alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
-                        alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
-                        alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
-                    ]
+            st.write("DEBUG: built cy_19_24 pivot")
+
+            cy_19_24["abs_change"] = (
+                cy_19_24["passengers_post"] - cy_19_24["passengers_pre"]
+            )
+
+            cy_19_24["pct_change"] = np.where(
+                cy_19_24["passengers_pre"] > 0,
+                cy_19_24["abs_change"] / cy_19_24["passengers_pre"],
+                np.nan
+            )
+
+            cy_19_24["pct_change_pct"] = 100 * cy_19_24["pct_change"]
+
+            BASELINE_MIN_POSTCOVID = 50_000
+            cy_19_24 = cy_19_24[
+                cy_19_24["passengers_pre"] >= BASELINE_MIN_POSTCOVID
+            ].copy()
+
+            st.write(f"DEBUG: rows after baseline filter = {len(cy_19_24)}")
+
+            movers_view = st.selectbox(
+                "Post-COVID movers view:",
+                options=["Percent change", "Magnitude change"],
+                index=0,
+                key="post_covid_movers_view"
+            )
+
+            st.write(f"DEBUG: movers_view = {movers_view}")
+
+            if movers_view == "Percent change":
+                top_inc = cy_19_24.nlargest(5, "pct_change")
+                top_dec = cy_19_24.nsmallest(5, "pct_change")
+                movers_df = pd.concat([top_dec, top_inc])
+
+                movers_chart = (
+                    alt.Chart(movers_df)
+                    .mark_bar()
+                    .encode(
+                        x=alt.X(
+                            "foreign_country:N",
+                            sort=alt.SortField("pct_change_pct", order="ascending"),
+                            axis=alt.Axis(labelAngle=45, labelOverlap=False),
+                            title=None
+                        ),
+                        y=alt.Y(
+                            "pct_change_pct:Q",
+                            title="Percent change (2019 → 2024)"
+                        ),
+                        tooltip=[
+                            "foreign_country:N",
+                            alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                            alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                            alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
+                            alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
+                        ]
+                    )
+                    .properties(width=800, height=450)
                 )
-                .properties(width=800, height=450)
+            else:
+                top_inc = cy_19_24.nlargest(5, "abs_change")
+                top_dec = cy_19_24.nsmallest(5, "abs_change")
+                movers_df = pd.concat([top_dec, top_inc])
+
+                movers_chart = (
+                    alt.Chart(movers_df)
+                    .mark_bar()
+                    .encode(
+                        x=alt.X(
+                            "foreign_country:N",
+                            sort=alt.SortField("abs_change", order="ascending"),
+                            axis=alt.Axis(labelAngle=45, labelOverlap=False),
+                            title=None
+                        ),
+                        y=alt.Y(
+                            "abs_change:Q",
+                            title="Passenger change (2019 → 2024)"
+                        ),
+                        tooltip=[
+                            "foreign_country:N",
+                            alt.Tooltip("passengers_pre:Q", title="2019 passengers", format=",.0f"),
+                            alt.Tooltip("passengers_post:Q", title="2024 passengers", format=",.0f"),
+                            alt.Tooltip("abs_change:Q", title="Absolute change", format=",.0f"),
+                            alt.Tooltip("pct_change_pct:Q", title="Percent change", format=".1f"),
+                        ]
+                    )
+                    .properties(width=800, height=450)
+                )
+
+            st.write("DEBUG: built movers chart")
+
+            zero_line = alt.Chart(
+                pd.DataFrame({"y": [0]})
+            ).mark_rule(strokeDash=[4, 4]).encode(
+                y="y:Q"
             )
 
-        zero_line = alt.Chart(
-            pd.DataFrame({"y": [0]})
-        ).mark_rule(strokeDash=[4, 4]).encode(
-            y="y:Q"
-        )
+            st.altair_chart(movers_chart + zero_line, use_container_width=False)
+            st.write("DEBUG: rendered third chart")
 
-        st.altair_chart(movers_chart + zero_line, use_container_width=False)
+            st.write(
+                "The figure above shows how international passenger flows changed over the five years "
+                "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
+                "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
+                "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
+                "baselines. This contrast suggests that some travel markets were able to rebound quickly "
+                "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
+                "whereas others appear to have experienced more lasting structural disruption."
+            )
 
-        st.write(
-            "The figure above shows how international passenger flows changed over the five years "
-            "following the onset of the COVID-19 shock, comparing 2019 with 2024. In percentage terms, "
-            "countries such as Guyana, Greece, and Qatar exhibited some of the strongest recoveries, "
-            "while markets such as Ukraine, Palau, and Hungary remained well below their pre-pandemic "
-            "baselines. This contrast suggests that some travel markets were able to rebound quickly "
-            "because of resilient tourism demand, diaspora travel, or restored network connectivity, "
-            "whereas others appear to have experienced more lasting structural disruption."
-        )
+            st.write(
+                "When the view is shifted to absolute magnitude, the largest passenger gains came from "
+                "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
+                "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
+                "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
+                "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
+                "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
+            )
 
-        st.write(
-            "When the view is shifted to absolute magnitude, the largest passenger gains came from "
-            "countries such as Mexico, the Dominican Republic, and Colombia, reflecting the scale of "
-            "travel flows in the Americas and likely capturing the combined effects of migration dynamics, "
-            "tourism, and regional mobility. By contrast, the largest absolute declines came from China, "
-            "followed by Cuba and Japan, pointing to the lingering effects of border restrictions, visa "
-            "frictions, geopolitical tensions, and slower demand recovery in specific travel corridors."
-        )
+            st.write("DEBUG THIRD SECTION OK")
 
-        st.write("DEBUG THIRD SECTION OK")
-
-    except Exception as e:
-        st.error("The page crashed. Exact error below.")
-        st.exception(e)
+        except Exception as e:
+            st.error("Third section crashed. Exact error below.")
+            st.exception(e)
 
 render_geopolitical_page()
