@@ -260,6 +260,22 @@ def render_airport_page():
         width='container',
         height=120)
 
+    import textwrap
+
+    def create_text_chart(content, fontSize=13, width_chars=140):
+        wrapped_text = textwrap.wrap(content, width=width_chars)
+        return alt.Chart(alt.Data(values=[{'text': wrapped_text}])).mark_text(
+         align='left',     
+         baseline='top', 
+         fontSize=fontSize, 
+         fontWeight='normal',
+         color='#666', lineBreak='\n', x=0               
+     ).encode(
+          text='text:N'
+     ).properties(
+          width=800,        
+          height=len(wrapped_text) * (fontSize + 6))
+
     years_bar_chart_text_2 = create_text_chart("""The first figure below is identical to the first figure shown on the previous dashboard and uses a bar chart format to display the total number of international passengers flown to and from the United States each year. You may again select the year to highlight for this chart and the remaining figures using the slider at the bottom of the dashboard.""")
     map_text = create_text_chart("""Next, we explore the number of international passengers flown each year from each airport serving international flights within the United States. Each circle represents a specific airport within the United States, while the size of the circle represents the number of passengers traveling internationally to and from the airport in the selected year. Hovering over a circle displays the airport’s name, code, and the precise number of passengers flying to and from it. By selecting an airport, the three charts below, which provide greater detail into the international trends for each airport, populate. You can observe the change in the number of passengers traveling internationally from each airport—and thus how the airports that serve as the largest international gateways have changed—by changing the year using the slider at the bottom of the dashboard. From the map, we can observe that the majority of the airports with the most international passengers are, as expected, in the country’s largest cities, especially those located near the coasts or the northern or southern borders. New York JFK Airport, Miami International Airport, and Los Angeles International Airport are consistently the airports that serve the most international passengers, and all experience steady growth in the number of passengers flown.""")
     line_plot_text = create_text_chart("""The figures below populate once you select an airport from the map above. We next explore how trends change at the airport level; the line chart compares the year with the number of passengers flown internationally to and from the selected airport. At many airports, such as Atlanta and Washington Dulles, we see mostly steady growth in international passengers over time—though as seen in the previous dashboard, there are consistent decreases in 2020 due to the COVID-19 pandemic. New York JFK and Newark appear to be the airports with the greatest decreases in annual passengers in 2001 and 2002, which correlates with the September 11 attacks; both experienced roughly 15% decreases in passengers in 2001 compared to 2000. A number of airports also experience large shocks in international passenger volume within narrow timeframes. For example, St. Louis, Pittsburgh, Memphis, and Cincinnati all saw significant decreases that correlate with airlines closing down their local hubs. In recent years, several airports have experienced significant growth from historically low levels; these include Austin, Denver, Nashville, and San Diego, among others.""")
