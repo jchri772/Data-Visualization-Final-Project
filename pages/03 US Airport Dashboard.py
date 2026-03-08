@@ -10,6 +10,14 @@ st.set_page_config(layout="wide")
 st.markdown(
     """
     <style>
+    header {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    <style>
     .stApp {
         background-color: #A9A9A9;
     }
