@@ -4,6 +4,17 @@ import pandas as pd
 import numpy as np
 from utils.data_utils import get_all_data
 
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #808080;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.markdown("---")
 st.write("")
