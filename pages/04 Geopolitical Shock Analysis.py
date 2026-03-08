@@ -14,7 +14,14 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
+st.markdown(
+    """
+    <style>
+    header {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.header("Geopolitical shocks: country-level collapses and post-COVID movers")
 st.markdown("---")
 st.write("")
