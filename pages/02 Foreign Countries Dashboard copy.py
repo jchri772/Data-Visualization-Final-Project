@@ -8,6 +8,17 @@ from utils.data_utils import get_all_data
 st.title("US-International Travel: Passenger Trends by Foreign Country Dashboard (1990-2025)")
 st.set_page_config(layout="wide")
 
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #A9A9A9;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("""
     <style>
     /* Target the main container */
