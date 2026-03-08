@@ -38,7 +38,12 @@ DATA 227 Final Project: Analyzing US-International Flight Trends (1990-2025)
 unsafe_allow_html=True
 )
 
-st.divider()
+st.markdown(
+"""
+<hr style="border:2px solid white;">
+""",
+unsafe_allow_html=True
+)
 
 st.markdown(
 """
