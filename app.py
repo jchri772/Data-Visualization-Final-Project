@@ -7,16 +7,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #f2f2f2;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 def set_background(image_file):
     with open(image_file, "rb") as f:
