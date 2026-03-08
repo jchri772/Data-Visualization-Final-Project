@@ -29,9 +29,16 @@ def set_background(image_file):
 
 set_background("background.jpg")
 
-st.title("DATA 227 Final Project: Analyzing US-International Flight Trends (1990-2025)")
+st.markdown(
+"""
+<h1 style="color:white;">
+DATA 227 Final Project: Analyzing US-International Flight Trends (1990-2025)
+</h1>
+""",
+unsafe_allow_html=True
+)
 
-st.write("---")
+st.divider()
 
 st.markdown(
 """
