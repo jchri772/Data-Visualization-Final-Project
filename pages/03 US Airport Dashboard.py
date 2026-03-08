@@ -7,25 +7,6 @@ from utils.data_utils import get_all_data
 
 st.set_page_config(layout="wide")
 
-st.markdown(
-    """
-    <style>
-    header {visibility: hidden;}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #A9A9A9;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.markdown("""
     <style>
     /* Target the main container */
