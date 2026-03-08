@@ -40,7 +40,7 @@ unsafe_allow_html=True
 
 st.markdown(
 """
-<hr style="border:2px solid white;">
+<hr style="border:1px solid white;">
 """,
 unsafe_allow_html=True
 )
