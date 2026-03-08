@@ -4,24 +4,6 @@ import streamlit as st
 import altair as alt
 from utils.data_utils import get_all_data
 
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #A9A9A9;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown(
-    """
-    <style>
-    header {visibility: hidden;}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 st.markdown("""
     <style>
     /* Target the main container */
