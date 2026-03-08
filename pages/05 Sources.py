@@ -4,7 +4,16 @@ import streamlit as st
 import altair as alt
 from utils.data_utils import get_all_data
 
-
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f2f2f2;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.markdown("""
     <style>
